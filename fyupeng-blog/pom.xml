@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>cn.fyupeng</groupId>
+    <artifactId>fyupeng-blog</artifactId>
+    <version>1.0.0</version>
+    <packaging>pom</packaging>
+
+    <name>fyupeng-分布式博客平台实战</name>
+    <description>
+        Web开发
+        maven
+        springmvc
+        springboot
+        mybatis
+        mybatis-pagehelper
+        redis
+        druid
+        mariadb/mysql
+        mongodb
+        redis
+        rpc-netty-framework
+    </description>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.1.2.RELEASE</version>
+        <relativePath/>
+    </parent>
+
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
+        <mysql.version>8.0.25</mysql.version>
+    </properties>
+
+    <modules>
+        <module>fyupeng-blog-common</module>
+        <module>fyupeng-blog-pojo</module>
+        <module>fyupeng-blog-mapper</module>
+        <module>fyupeng-blog-service</module>
+        <module>fyupeng-blog-api</module>
+    </modules>
+
+</project>
