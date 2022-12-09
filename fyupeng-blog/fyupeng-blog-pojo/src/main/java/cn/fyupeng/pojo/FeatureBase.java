@@ -1,7 +1,9 @@
 package cn.fyupeng.pojo;
 
 
-public class FeatureBase {
+import java.io.Serializable;
+
+public class FeatureBase implements Serializable {
     /**
      * 主键
      */

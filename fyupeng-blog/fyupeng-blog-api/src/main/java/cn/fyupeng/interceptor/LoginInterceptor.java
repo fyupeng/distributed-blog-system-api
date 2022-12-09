@@ -1,5 +1,6 @@
 package cn.fyupeng.interceptor;
 
+import cn.fyupeng.utils.BlogJSONResult;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import cn.fyupeng.controller.BasicController;
@@ -9,6 +10,9 @@ import cn.fyupeng.pojo.User;
 import cn.fyupeng.service.UserService;
 import cn.fyupeng.utils.RedisUtils;
 import cn.fyupeng.utils.TokenUtils;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -16,6 +20,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.lang.reflect.Method;
 
 /**
@@ -26,6 +32,7 @@ import java.lang.reflect.Method;
  * @Version: 1.0
  */
 @Component
+@Slf4j
 public class LoginInterceptor extends BasicController implements HandlerInterceptor {
 
     @Override
@@ -51,25 +58,30 @@ public class LoginInterceptor extends BasicController implements HandlerIntercep
             if (userLoginToken.required()) {
                 // 执行认证
                 if (token == null) {
-                    throw new RuntimeException("无token，请重新登录");
+                    returnResponse(response, "application/json;charset=utf-8", BlogJSONResult.errorTokenMsg("No token exists"));
+                    log.error("No token exists");
                 }
                 // 获取 token 中的 user id
-                String userId;
-                String userName;
-                String password;
+                String userId = null;
+                String userName = null;
+                String password = null;
                 try {
                     userId = JWT.decode(token).getClaim("userId").asString();
                     userName = JWT.decode(token).getClaim("username").asString();
                     password = JWT.decode(token).getClaim("password").asString();
                 } catch (JWTDecodeException j) {
-                    throw new RuntimeException("The token is incorrect, please do not create the token by illegal means");
+                    returnResponse(response, "application/json;charset=utf-8", BlogJSONResult.errorTokenMsg("Illegal token"));
+                    log.error("Illegal token");
+                    return false;
                 }
                 //查询数据库，看看是否存在此用户，方法要自己写
                 UserService userServiceProxy = rpcClientProxy.getProxy(UserService.class);
                 // password 为 MD5 加密密文
                 User user = userServiceProxy.queryUserForLogin(userName, password);
                 if (user == null) {
-                    throw new RuntimeException("User does not exist, please log in again");
+                    returnResponse(response, "application/json;charset=utf-8", BlogJSONResult.errorTokenMsg("Invalid token"));
+                    log.error("Invalid token");
+                    return false;
                 }
 
                 // 验证 token
@@ -77,14 +89,20 @@ public class LoginInterceptor extends BasicController implements HandlerIntercep
                     String userRedisSession = RedisUtils.getUserRedisSession(userId);
                     if(redis.get(userRedisSession) != null)
                         return true;
+                    returnResponse(response, "application/json;charset=utf-8", BlogJSONResult.errorTokenMsg("Expired token"));
+                    log.error("Expired token");
                     return false;
                 } else {
-                    throw new RuntimeException("Token expired or incorrect, please log in again");
+                    returnResponse(response, "application/json;charset=utf-8", BlogJSONResult.errorTokenMsg("Invalid token"));
+                    log.error("Invalid token");
+                    return false;
                 }
 
             }
         }
-        throw new RuntimeException("Annotation without permission will not pass");
+        log.error("class [{}] whose method [{}] annotation without permission will not pass",method.getDeclaringClass().getName(), method.getName());
+        returnResponse(response, "application/json;charset=utf-8", BlogJSONResult.errorMsg("Reject access"));
+        return false;
     }
 
     @Override
@@ -94,4 +112,28 @@ public class LoginInterceptor extends BasicController implements HandlerIntercep
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
     }
+
+    /**
+     *
+     * @param resp HttpServletResponse
+     * @param contentType application/json;charset=utf-8
+     * @param result BlogJSONResult
+     */
+    private void returnResponse(HttpServletResponse resp, String contentType, BlogJSONResult result) {
+
+        String json = "";
+        ObjectMapper om = new ObjectMapper();
+        try {
+            json = om.writeValueAsString(result);
+            PrintWriter pw =  resp.getWriter();
+            resp.setContentType(contentType);
+            pw.print(json);
+            pw.close();
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

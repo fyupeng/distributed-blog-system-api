@@ -2,8 +2,9 @@ package cn.fyupeng.pojo;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
+import java.io.Serializable;
 
-public class Articles2tags {
+public class Articles2tags implements Serializable {
     @Id
     private String id;
 

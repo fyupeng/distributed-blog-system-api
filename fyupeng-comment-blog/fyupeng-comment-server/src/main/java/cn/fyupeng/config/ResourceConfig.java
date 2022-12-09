@@ -8,7 +8,7 @@ import org.springframework.context.annotation.PropertySource;
  * @Auther: fyp
  * @Date: 2022/8/17
  * @Description: 资源配置
- * @Package: com.fyupeng.config
+ * @Package: cn.fyupeng.config
  * @Version: 1.0
  */
 @Configuration
@@ -16,7 +16,16 @@ import org.springframework.context.annotation.PropertySource;
 //不使用默认配置文件application.properties和application.yml
 @PropertySource("classpath:resource.properties")
 public class ResourceConfig {
+    private String serverIp;
     private int serverPort;
+
+    public String getServerIp() {
+        return serverIp;
+    }
+
+    public void setServerIp(String serverIp) {
+        this.serverIp = serverIp;
+    }
 
     public int getServerPort() {
         return serverPort;

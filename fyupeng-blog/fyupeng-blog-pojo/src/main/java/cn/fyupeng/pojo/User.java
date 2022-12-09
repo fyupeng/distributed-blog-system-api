@@ -3,9 +3,11 @@ package cn.fyupeng.pojo;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import java.io.Serializable;
+
 
 @ApiModel(description = "操作用户登录和注册的model")
-public class User {
+public class User implements Serializable {
     /**
      * 主键，注意：可能逆向表生成对象与mysql.user冲突
      */

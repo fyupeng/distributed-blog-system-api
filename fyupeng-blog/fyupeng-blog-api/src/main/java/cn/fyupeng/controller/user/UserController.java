@@ -30,8 +30,8 @@ import java.io.InputStream;
 @RequestMapping(value = "/user")
 @Api(value = "用户相关业务的接口", tags = {"用户相关业务的controller"})
 public class UserController extends BasicController {
-    @Reference
-    UserService userServiceProxy = rpcClientProxy.getProxy(UserService.class, UserController.class);
+    @Reference(timeout = 8000, asyncTime = 15000)
+    private UserService userServiceProxy = rpcClientProxy.getProxy(UserService.class, UserController.class);
 
     @PassToken
     @GetMapping(value = "/pingNetWork")

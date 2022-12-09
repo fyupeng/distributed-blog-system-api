@@ -39,7 +39,7 @@ public class Sid {
     public static String next() {
         long id = idWorker.nextId();
         String yyMMdd = new SimpleDateFormat("yyMMdd").format(new Date());
-        return yyMMdd + String.format("%014d", id);
+        return yyMMdd + String.format("%015d", id);
     }
 
 

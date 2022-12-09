@@ -27,7 +27,7 @@ import java.util.UUID;
 @RequestMapping(value = "/admin")
 @Api(value = "管理员注册登录的接口", tags = {"管理员注册和登录的controller"})
 public class AdminRegistLoginController extends BasicController {
-    @Reference
+    @Reference(timeout = 5000, asyncTime = 10000)
     private UserService userServiceProxy = rpcClientProxy.getProxy(UserService.class, AdminRegistLoginController.class);
 
     @UserLoginToken

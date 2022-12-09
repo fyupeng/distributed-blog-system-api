@@ -117,11 +117,12 @@ public class CommentServiceImpl implements CommentService {
         Example<Comment> articleExample = Example.of(comment, articleExampleMatcher);
 
         //mongodb数据中默认是 按时间正序排序（顺着时间走向排序、升序）
-        Pageable pageable = new PageRequest(page, pageSize);
+        Sort sort = Sort.by(Sort.Direction.ASC, "createtime");
+        Pageable pageable = PageRequest.of(page, pageSize, sort) ;
 
         if (sortNum == 2) {
-            Sort sort = new Sort(Sort.Direction.DESC, "createTime");
-            pageable = new PageRequest(page, pageSize, sort);
+            sort = Sort.by(Sort.Direction.DESC, "createtime");
+            pageable = PageRequest.of(page, pageSize, sort);
         }
 
 
@@ -380,7 +381,7 @@ public class CommentServiceImpl implements CommentService {
          * 管理员应该 获取所有状态的 评论
          */
         //query.addCriteria(Criteria.where("status").is(CommentStatus.NORMAL.getStatus()));
-        Sort sort = new Sort(Sort.Direction.DESC, "createTime");
+        Sort sort = Sort.by(Sort.Direction.DESC, "createTime");
         query.with(sort);
     }
 

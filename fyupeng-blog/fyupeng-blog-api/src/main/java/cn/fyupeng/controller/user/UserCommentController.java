@@ -34,15 +34,15 @@ import org.springframework.web.bind.annotation.*;
 @Api(value = "评论相关业务的接口", tags = {"评论相关业务的controller"})
 @RequestMapping(value = "/user/comment")
 public class UserCommentController extends BasicController {
-    @Reference
+    @Reference(timeout = 8000, asyncTime = 15000)
     private TagService tagServiceProxyProxy = rpcClientProxy.getProxy(TagService.class, UserCommentController.class);
-    @Reference
+    @Reference(timeout = 8000, asyncTime = 15000)
     private UserService userServiceProxy = rpcClientProxy.getProxy(UserService.class, UserCommentController.class);
-    @Reference
+    @Reference(timeout = 8000, asyncTime = 15000)
     private ArticleService articleServiceProxy = rpcClientProxy.getProxy(ArticleService.class, UserCommentController.class);
-    @Reference
+    @Reference(timeout = 8000, asyncTime = 15000)
     private ClassficationService classficationServiceProxy = rpcClientProxy.getProxy(ClassficationService.class, UserCommentController.class);
-    @Reference
+    @Reference(timeout = 8000, asyncTime = 15000)
     private CommentService commentServiceProxy = rpcClientProxy.getProxy(CommentService.class, UserCommentController.class);
 
 

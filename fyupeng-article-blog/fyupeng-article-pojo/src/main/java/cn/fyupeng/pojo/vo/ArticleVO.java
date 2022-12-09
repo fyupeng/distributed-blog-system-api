@@ -1,5 +1,6 @@
 package cn.fyupeng.pojo.vo;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -9,7 +10,7 @@ import java.util.Date;
  * @Package: com.crop.pojo.vo
  * @Version: 1.0
  */
-public class ArticleVO implements Comparable {
+public class ArticleVO implements Comparable, Serializable {
 
     private String id;
 

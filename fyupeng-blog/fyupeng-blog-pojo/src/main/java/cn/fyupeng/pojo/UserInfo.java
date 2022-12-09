@@ -3,9 +3,11 @@ package cn.fyupeng.pojo;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import java.io.Serializable;
+
 
 @ApiModel(description = "操作用户上传头像和其他详细操作的model")
-public class UserInfo {
+public class UserInfo implements Serializable {
     /**
      * 主键
      */

@@ -16,7 +16,7 @@ import java.net.URL;
 @RestController
 public class BasicController {
     private static final RoundRobinLoadBalancer roundRobinLoadBalancer = new RoundRobinLoadBalancer();
-    private static final NettyClient nettyClient = new NettyClient(roundRobinLoadBalancer, CommonSerializer.KRYO_SERIALIZER);
+    private static final NettyClient nettyClient = new NettyClient(roundRobinLoadBalancer, CommonSerializer.HESSIAN_SERIALIZER);
 
     protected RpcClientProxy rpcClientProxy = new RpcClientProxy(nettyClient);
 

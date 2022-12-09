@@ -1,6 +1,8 @@
 package cn.fyupeng.pojo.vo;
 
-public class TagVO {
+import java.io.Serializable;
+
+public class TagVO implements Serializable {
     /**
      * 主键
      */

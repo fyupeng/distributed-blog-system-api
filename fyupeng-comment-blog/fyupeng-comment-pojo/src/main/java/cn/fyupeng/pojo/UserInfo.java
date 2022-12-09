@@ -3,9 +3,10 @@ package cn.fyupeng.pojo;
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serializable;
 
 @Table(name = "user_info")
-public class UserInfo {
+public class UserInfo implements Serializable {
     @Id
     private String id;
 

@@ -34,7 +34,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/user")
 @Api(value = "用户注册登录的接口", tags = {"注册和登录的controller"})
 public class UserRegisterAndLoginController extends BasicController {
-    @Reference(timeout = 5000, asyncTime = 7000)
+    @Reference(timeout = 8000, asyncTime = 15000)
     private UserService userServiceProxy = rpcClientProxy.getProxy(UserService.class, UserRegisterAndLoginController.class);
 
     /**

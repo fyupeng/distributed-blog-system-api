@@ -39,9 +39,9 @@ import java.util.List;
 @RequestMapping(value = "/admin/comment")
 @Api(value = "评论相关业务的接口", tags = {"评论相关业务的controller"})
 public class AdminCommentController extends BasicController {
-    @Reference
+    @Reference(timeout = 5000, asyncTime = 10000)
     private UserService userServiceProxy = rpcClientProxy.getProxy(UserService.class, AdminCommentController.class);
-    @Reference
+    @Reference(timeout = 5000, asyncTime = 10000)
     private CommentService commentServiceProxy = rpcClientProxy.getProxy(CommentService.class, AdminCommentController.class);
 
 

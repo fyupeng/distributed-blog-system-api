@@ -33,11 +33,11 @@ import java.util.List;
 @Api(value = "标签相关业务的接口", tags = {"标签相关业务的controller"})
 @RequestMapping(value = "/user/tag")
 public class UserTagController extends BasicController {
-    @Reference
+    @Reference(timeout = 8000, asyncTime = 15000)
     private TagService tagServiceProxy = rpcClientProxy.getProxy(TagService.class, UserTagController.class);
-    @Reference
+    @Reference(timeout = 8000, asyncTime = 15000)
     private UserService userServiceProxy = rpcClientProxy.getProxy(UserService.class, UserTagController.class);
-    @Reference
+    @Reference(timeout = 8000, asyncTime = 15000)
     private ArticleService articleServiceProxy = rpcClientProxy.getProxy(ArticleService.class, UserTagController.class);
 
     @UserLoginToken

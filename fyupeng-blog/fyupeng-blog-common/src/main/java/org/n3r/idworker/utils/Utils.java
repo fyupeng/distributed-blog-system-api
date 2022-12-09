@@ -109,6 +109,6 @@ public class Utils {
         idWorkerHome.mkdirs();
         if (idWorkerHome.isDirectory()) return idWorkerHome;
 
-        throw new RuntimeException("failed to create .idworkers at user home");
+        throw new RuntimeException("failed to create idworkers at user home");
     }
 }

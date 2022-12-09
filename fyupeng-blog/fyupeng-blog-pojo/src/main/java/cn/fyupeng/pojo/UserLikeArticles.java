@@ -3,9 +3,11 @@ package cn.fyupeng.pojo;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import java.io.Serializable;
+
 
 @ApiModel(description = "操作用户收藏文章的model")
-public class UserLikeArticles {
+public class UserLikeArticles implements Serializable {
     /**
      * 主键
      */

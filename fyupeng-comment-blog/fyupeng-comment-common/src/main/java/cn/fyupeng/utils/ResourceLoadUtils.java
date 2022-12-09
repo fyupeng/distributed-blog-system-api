@@ -6,10 +6,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * @Auther: fyp
@@ -49,9 +46,23 @@ public class ResourceLoadUtils {
             }
             log.info("read resource from resource path: {}", currentWorkPath + "/config/" + resourceName);
             return resourceLoaders;
-        } catch (IOException e) {
+        } catch (IOException ioException) {
             log.info("not found resource from resource path: {}", currentWorkPath + "/config/" + resourceName);
-            return null;
+            try {
+                ResourceBundle resource = ResourceBundle.getBundle("resource");
+                Set<String> keys = resource.keySet();
+                Iterator<String> keysIterator = keys.iterator();
+                while (keysIterator.hasNext()) {
+                    String property = keysIterator.next();
+                    propertyValue = resource.getString(property);
+                    resourceLoaders.put(property, propertyValue);
+                }
+            } catch (MissingResourceException resourceException) {
+                log.info("not found resource from resource path: {}", "resource.properties");
+            }
+            log.info("read resource from resource path: {}", "resource.properties");
+            return resourceLoaders;
         }
+
     }
 }

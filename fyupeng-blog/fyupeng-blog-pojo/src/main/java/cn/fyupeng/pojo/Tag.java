@@ -3,9 +3,11 @@ package cn.fyupeng.pojo;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import java.io.Serializable;
+
 
 @ApiModel(description = "操作文章标签的model")
-public class Tag {
+public class Tag implements Serializable {
     /**
      * 主键
      */

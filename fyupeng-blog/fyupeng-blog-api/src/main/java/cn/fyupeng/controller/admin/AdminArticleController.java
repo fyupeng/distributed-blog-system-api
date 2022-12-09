@@ -43,13 +43,13 @@ import java.util.concurrent.TimeUnit;
 @RequestMapping(value = "/admin/article")
 @Api(value = "文章相关业务的接口", tags = {"文章相关业务的controller"})
 public class AdminArticleController extends BasicController {
-    @Reference
+    @Reference(timeout = 8000, asyncTime = 15000)
     private TagService tagServiceProxy = rpcClientProxy.getProxy(TagService.class, AdminArticleController.class);
-    @Reference
+    @Reference(timeout = 8000, asyncTime = 15000)
     private UserService userServiceProxy = rpcClientProxy.getProxy(UserService.class, AdminArticleController.class);
-    @Reference
+    @Reference(timeout = 8000, asyncTime = 15000)
     private ArticleService articleServiceProxy = rpcClientProxy.getProxy(ArticleService.class, AdminArticleController.class);
-    @Reference
+    @Reference(timeout = 8000, asyncTime = 15000)
     private ClassficationService classficationServiceProxy = rpcClientProxy.getProxy(ClassficationService.class, AdminArticleController.class);
 
     private static ScheduledExecutorService executor;

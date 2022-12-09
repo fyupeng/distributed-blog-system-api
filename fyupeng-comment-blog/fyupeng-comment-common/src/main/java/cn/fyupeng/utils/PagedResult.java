@@ -1,11 +1,12 @@
 package cn.fyupeng.utils;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * @Description: 封装分页后的数据格式
  */
-public class PagedResult {
+public class PagedResult implements Serializable {
 	
 	private int page;			// 当前页数
 	private int total;			// 总页数	

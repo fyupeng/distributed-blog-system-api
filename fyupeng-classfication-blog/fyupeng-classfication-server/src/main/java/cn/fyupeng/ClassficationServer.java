@@ -59,7 +59,7 @@ public class ClassficationServer implements CommandLineRunner {
         while(true){
             NettyServer nettyServer = null;
             try {
-                nettyServer = new NettyServer(resourceConfig.getServerIp(), resourceConfig.getServerPort(), SerializerCode.KRYO.getCode());
+                nettyServer = new NettyServer(resourceConfig.getServerIp(), resourceConfig.getServerPort(), SerializerCode.HESSIAN.getCode());
             } catch (RpcException e) {
                 e.printStackTrace();
             }

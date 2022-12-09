@@ -1,8 +1,9 @@
 package cn.fyupeng.pojo;
 
 import javax.persistence.Id;
+import java.io.Serializable;
 
-public class Classfication {
+public class Classfication implements Serializable {
     @Id
     private String id;
 

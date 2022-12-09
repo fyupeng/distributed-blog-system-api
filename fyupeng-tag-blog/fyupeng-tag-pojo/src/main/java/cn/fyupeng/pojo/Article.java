@@ -5,10 +5,11 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
+import java.io.Serializable;
 import java.util.Date;
 
 @Document(collection = "article")
-public class Article {
+public class Article implements Serializable {
     @Id
     private String id;
 

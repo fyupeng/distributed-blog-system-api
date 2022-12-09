@@ -1,7 +1,9 @@
 package cn.fyupeng.pojo;
 
 
-public class Classfication {
+import java.io.Serializable;
+
+public class Classfication implements Serializable {
     /**
      * 主键
      */

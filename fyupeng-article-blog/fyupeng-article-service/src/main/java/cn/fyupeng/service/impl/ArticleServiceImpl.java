@@ -218,9 +218,15 @@ public class ArticleServiceImpl implements ArticleService {
             UserInfo userInfo = basicService.userinfoMapper.selectOneByExample(userInfoExample);
             Classfication classfication = basicService.classficationMapper.selectByPrimaryKey(result.getClassId());
 
-            articleVO.setAvatar(userInfo.getAvatar());
-            articleVO.setNickName(userInfo.getNickname());
-            articleVO.setClassficationName(classfication.getName());
+            if (userInfo != null) {
+                articleVO.setAvatar(userInfo.getAvatar());
+                articleVO.setNickName(userInfo.getNickname());
+            }
+
+            if (classfication != null) {
+                articleVO.setClassficationName(classfication.getName());
+            }
+
 
             // 标签
             String aid = result.getId();
@@ -400,11 +406,14 @@ public class ArticleServiceImpl implements ArticleService {
         queryAll.addCriteria(Criteria.where("createTime").gt(oneWekkAgodate));
         queryCurrentPage.addCriteria(Criteria.where("createTime").gt(oneWekkAgodate));
 
+        List<String> sortCondition = new ArrayList<>();
+        sortCondition.add("createTime");
+
         // 倒序 时间
-        Sort sort = new Sort(Sort.Direction.DESC, "createTime");
+        Sort sort = Sort.by(Sort.Direction.DESC, "createTime");
         queryAll.with(sort);
         queryCurrentPage.with(sort);
-        PageRequest pageRequest = new PageRequest(page, pageSize);
+        PageRequest pageRequest = PageRequest.of(page, pageSize);
         queryCurrentPage.with(pageRequest);
         // 分页
 
@@ -412,7 +421,7 @@ public class ArticleServiceImpl implements ArticleService {
          * PageHelper 不支持 mongodb 查询
          */
         //PageHelper.startPage(page, pageSize);
-        List<Article> allArticleList = basicService.mongoTemplate.find(queryAll, Article.class);
+        long allArticleCount = basicService.mongoTemplate.count(queryAll, Article.class);
         List<Article> currentPageArticleList = basicService.mongoTemplate.find(queryCurrentPage, Article.class);
 
 
@@ -433,7 +442,7 @@ public class ArticleServiceImpl implements ArticleService {
             artileVOList.add(articleVO);
         }
 
-        long records = allArticleList.size();
+        long records = allArticleCount;
         int total = 1;
         // 每页 大小 小于 总记录数 时才需要分页
         if (pageSize < records) {
@@ -553,7 +562,7 @@ public class ArticleServiceImpl implements ArticleService {
     private Page<Article> readAndExcute(String metcherProperty, ExampleMatcher matching, Article article, Integer page, Integer pageSize) {
         ExampleMatcher exampleMatcher = matching.withMatcher(metcherProperty, ExampleMatcher.GenericPropertyMatchers.contains());
         Example<Article> articleExample = Example.of(article, exampleMatcher);
-        Pageable pageable = new PageRequest(page, pageSize);
+        Pageable pageable = PageRequest.of(page, pageSize);
         return basicService.articleRepository.findAll(articleExample, pageable);
     }
 

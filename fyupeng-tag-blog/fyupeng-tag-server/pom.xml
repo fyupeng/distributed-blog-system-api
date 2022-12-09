@@ -24,7 +24,18 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>2.1.2.RELEASE</version>
+                <version>2.4.3</version>
+                <configuration>
+                    <mainClass>cn.fyupeng.TagServer</mainClass>
+                </configuration>
+                <!-- mvn install 后自动打包 mvn package  -->
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

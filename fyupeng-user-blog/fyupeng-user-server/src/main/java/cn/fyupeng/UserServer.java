@@ -4,7 +4,9 @@ import cn.fyupeng.config.ResourceConfig;
 import cn.fyupeng.anotion.ServiceScan;
 import cn.fyupeng.enums.SerializerCode;
 import cn.fyupeng.exception.RpcException;
+import cn.fyupeng.idworker.utils.JRedisHelper;
 import cn.fyupeng.net.netty.server.NettyServer;
+import cn.fyupeng.util.IpUtils;
 import cn.fyupeng.utils.ResourceLoadUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,12 +55,12 @@ public class UserServer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        JRedisHelper.getForHostName(IpUtils.getPubIpAddr());
         //这里也可以添加一些业务处理方法，比如一些初始化参数等
         while(true){
             NettyServer nettyServer = null;
             try {
-                nettyServer = new NettyServer(resourceConfig.getServerIp(), resourceConfig.getServerPort(), SerializerCode.KRYO.getCode());
-
+                nettyServer = new NettyServer(resourceConfig.getServerIp(), resourceConfig.getServerPort(), SerializerCode.HESSIAN.getCode());
             } catch (RpcException e) {
                 e.printStackTrace();
             }

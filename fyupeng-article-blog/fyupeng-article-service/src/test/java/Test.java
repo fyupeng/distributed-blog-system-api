@@ -1,4 +1,12 @@
-import cn.fyupeng.utils.BlogJSONResult;
+import cn.fyupeng.loadbalancer.RoundRobinLoadBalancer;
+import cn.fyupeng.net.netty.client.NettyClient;
+import cn.fyupeng.pojo.Article;
+import cn.fyupeng.pojo.Articles2tags;
+import cn.fyupeng.pojo.Classfication;
+import cn.fyupeng.proxy.RpcClientProxy;
+import cn.fyupeng.serializer.CommonSerializer;
+import cn.fyupeng.service.ArticleService;
+import cn.fyupeng.utils.PagedResult;
 
 import java.io.UnsupportedEncodingException;
 
@@ -10,27 +18,25 @@ import java.io.UnsupportedEncodingException;
  * @Version: 1.0
  */
 public class Test {
+
+   private static final RoundRobinLoadBalancer roundRobinLoadBalancer = new RoundRobinLoadBalancer();
+   private static final NettyClient nettyClient = new NettyClient(roundRobinLoadBalancer, CommonSerializer.KRYO_SERIALIZER);
+   protected static RpcClientProxy rpcClientProxy = new RpcClientProxy(nettyClient);
+   private static ArticleService articleService = rpcClientProxy.getProxy(ArticleService.class, Test.class);
+
    public static void main(String[] args) throws UnsupportedEncodingException {
-      BlogJSONResult result1 = new BlogJSONResult("你好呀");
-      BlogJSONResult result2 = new BlogJSONResult("你好呀");
-      System.out.println(result1);
-      System.out.println(result2);
-      System.out.println(result1.equals(result2));
-      System.out.println(result1 == result2);
+      Classfication classfication = new Classfication();
+      Article article = new Article();
+      article.setTitle("贪心");
+      article.setSummary("贪心");
+      article.setContent("贪心");
+      PagedResult pagedResult = articleService.queryArticleSelective(article, null, null);
+      //List<Classfication> classfications = classficationServiceProxy.queryAllClassfications();
+      for (Object row : pagedResult.getRows()) {
+         System.out.println(row);
+      }
 
-      byte[] bytes1 = result1.toString().getBytes("UTF-8");
-      byte[] bytes2 = result2.toString().getBytes("UTF-8");
-      System.out.println(bytes1);
-      System.out.println(bytes2);
-      System.out.println(bytes1 == bytes2);
-      System.out.println(bytes1.equals(bytes2));
-
-      String s1 = new String(bytes1);
-      String s2 = new String(bytes2);
-      System.out.println(s1);
-      System.out.println(s2);
-      System.out.println(s1 == s2);
-      System.out.println(s1.equals(s2));
 
    }
+
 }
