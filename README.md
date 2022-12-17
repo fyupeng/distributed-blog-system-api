@@ -106,6 +106,60 @@ http {
 
 热度搜索需要在前端做一个搜索，接着调用`api`将用户的搜索词汇放到`Redis`中，可以使用`zSet`，把时间戳当成`zSet`的权值，所以是有序的，可以获取近期的搜索，实现近期搜索（这里还可以将该关键字连同`userId`放到`Redis`做用户搜索记录），接着再使用`Redis`的`Hash`数据结构，将关键字作为`key`，`value`作为关键字搜索量，就能够做到近期热度搜索了。
 
+- 支持多表单多文件与`json`数据上传
+
+传统表单无法同时支持请求头`Content-Type`中`application/json`与`multipart/form-data`请求，不用去解决类似`WebKitFormBoundary`、Convert转换器不支持复杂问题。
+
+**实现**
+
+使用`multipart/form-data`，在需要同时上传`json`数据，先避开`boundary`问题，对于转化器转换失败问题，自定义转换器实现`Converter<入参类型, 出参类型>`接口，重写其方法`<出参类型> convert(<入参类型>)`
+
+直接传`String`类型，在后端自己格式转换，将`String`转成自己需要的任意类型，前端只需按照`json`形式传递即可。
+
+利用`SpringBoot`面向切面编程，入参直接写上转换后的对象。
+
+> 例如：
+
+转换器
+```java
+@Configuration
+public class PictureForUploadBOConverter implements Converter<String, List<PictureForUploadBO>> {
+
+    /**
+     * [
+     *   {
+     *     "pictureDesc":"图片描述1",
+     *     "pictureWidth":"100",
+     *     "pictureHeight":"120"
+     *   },
+     *   {
+     *     "pictureDesc":"图片描述2",
+     *     "pictureWidth":"100",
+     *     "pictureHeight":"120"
+     *   }
+     * ]
+     * @param pictureBOs
+     * @return
+     */
+    @Override
+    public List<PictureForUploadBO> convert(String pictureBOs) {
+        log.info("source string: {}", pictureBOs);
+        return JsonUtils.jsonToList(pictureBOs, PictureForUploadBO.class);
+    }
+}
+```
+控制器
+```java
+    @PostMapping(value = "/upload", headers = "content-type=multipart/form-data")
+    public BlogJSONResult upload(@RequestParam String userId, @RequestParam(value = "pictureBOs") List<PictureForUploadBO> pictureBOs,
+            @RequestPart(value = "file")  /**下面注解不推荐使用，会导致 swagger2 文件上传按钮失效*/
+            /**@RequestParam(value = "file")  
+                                 @ApiParam(name = "file", value = "图片", allowMultiple = true) 支持 swagger2 接口文档测试**/ 
+            MultipartFile[] file) throws Exception{
+    }
+```
+
+这样便能实现多文件上传并且每个文件对号配置一些信息参数。
 
 ### 问题修复
 
@@ -118,4 +172,3 @@ http {
 7. 解决大数据网络传输失败的问题（fastjson、kryo无法解决，推荐采用hessian作为序列化方式）；
 8. 解决重试超时抛出异常导致客户端处于结果不一致性的问题（采用advice监听所有异常，并以正常结果和异常信息返回，保证各种结果一致性）；
 9. 添加令牌访问，使得各种操作更加合理和高效（解决恶意的接口攻击）
-10. 
