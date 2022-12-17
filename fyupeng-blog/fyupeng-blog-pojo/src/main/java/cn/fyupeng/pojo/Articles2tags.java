@@ -10,19 +10,19 @@ public class Articles2tags implements Serializable {
     /**
      * 主键
      */
-    @ApiModelProperty(value = "关联id")
+    @ApiModelProperty(value = "关联id, 影响结果一致性的操作使用到该字段")
     private String id;
 
     /**
      * 文章id
      */
-    @ApiModelProperty(value = "文章id", required = true)
+    @ApiModelProperty(value = "文章id", required = true, example = "123456789")
     private String articleId;
 
     /**
      * 标签id
      */
-    @ApiModelProperty(value = "标签id", required = true)
+    @ApiModelProperty(value = "标签id", required = true, example = "123456789")
     private String tagId;
 
     public Articles2tags() {

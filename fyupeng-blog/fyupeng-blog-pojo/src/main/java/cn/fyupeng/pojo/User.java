@@ -17,13 +17,13 @@ public class User implements Serializable {
     /**
      * 用户名
      */
-    @ApiModelProperty(value = "用户名", required = true)
+    @ApiModelProperty(value = "用户名", required = true, example = "fyupeng")
     private String username;
 
     /**
      * 密码
      */
-    @ApiModelProperty(value = "密码", required = true)
+    @ApiModelProperty(value = "密码", required = true, example = "fyupeng_is_a_greate_name")
     private String password;
 
     /**

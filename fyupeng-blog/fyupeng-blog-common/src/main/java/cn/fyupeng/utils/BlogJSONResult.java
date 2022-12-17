@@ -1,5 +1,8 @@
 package cn.fyupeng.utils;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 /**
  * @Description: 自定义响应数据结构
  * 				这个类是提供给门户，ios，安卓，微信商城用的
@@ -11,15 +14,19 @@ package cn.fyupeng.utils;
  * 				502：拦截器拦截到用户token出错
  * 				555：异常抛出信息
  */
+@ApiModel(description = "接口返回响应体")
 public class BlogJSONResult {
 
     // 响应业务状态
+    @ApiModelProperty(value = "响应状态码")
     private Integer status;
 
     // 响应消息
+    @ApiModelProperty(value = "响应信息")
     private String msg;
 
     // 响应中的数据
+    @ApiModelProperty(value = "响应数据")
     private Object data;
     
     private String ok;	// 不使用

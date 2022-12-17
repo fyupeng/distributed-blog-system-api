@@ -43,7 +43,7 @@ public class UserTagController extends BasicController {
     @UserLoginToken
     @PostMapping(value = "/getTag")
     @ApiOperation(value = "获取标签", notes = "获取标签的接口")
-    @ApiImplicitParam(name = "tagId", value = "标签id", required = true, dataType = "String", paramType = "query")
+    @ApiImplicitParam(name = "tagId", value = "标签id", required = true, dataType = "java.lang.String", paramType = "query")
     public BlogJSONResult getTag(String tagId) {
 
         if (StringUtils.isBlank(tagId)) {
@@ -58,7 +58,7 @@ public class UserTagController extends BasicController {
     @UserLoginToken
     @PostMapping(value = "/getAllTags")
     @ApiOperation(value = "获取所有标签", notes = "获取所有标签的接口")
-    @ApiImplicitParam(name = "userId", value = "用户id", required = true, dataType = "String", paramType = "query")
+    @ApiImplicitParam(name = "userId", value = "用户id", required = true, dataType = "java.lang.String", paramType = "query")
     public BlogJSONResult getAllTags(String userId) {
         Tag tagWithUserId = new Tag();
         tagWithUserId.setUserId(userId);
@@ -71,7 +71,7 @@ public class UserTagController extends BasicController {
     @UserLoginToken
     @PostMapping(value = "/saveTag")
     @ApiOperation(value = "保存标签 - id字段请忽略", notes = "保存标签的接口")
-    @ApiImplicitParam(name = "tag", value = "标签", required = true, dataType = "Tag", paramType = "body")
+    @ApiImplicitParam(name = "tag", value = "标签", required = true, dataType = "cn.fyupeng.pojo.Tag", paramType = "body")
     public BlogJSONResult saveTag(@RequestBody Tag tag) {
 
         if (StringUtils.isBlank(tag.getName()) || StringUtils.isBlank(tag.getUserId())) {
@@ -94,7 +94,7 @@ public class UserTagController extends BasicController {
     @UserLoginToken
     @PostMapping(value = "/updateTag")
     @ApiOperation(value = "更新标签 - userId字段请忽略", notes = "更新标签的接口")
-    @ApiImplicitParam(name = "tag", value = "标签", required = true, dataType = "Tag", paramType = "body")
+    @ApiImplicitParam(name = "tag", value = "标签", required = true, dataType = "cn.fyupeng.pojo.Tag", paramType = "body")
     public BlogJSONResult updateTag(@RequestBody Tag tag) {
 
         if (StringUtils.isBlank(tag.getId()) || StringUtils.isBlank(tag.getName())) {
@@ -122,7 +122,7 @@ public class UserTagController extends BasicController {
     @UserLoginToken
     @PostMapping(value = "/removeTag")
     @ApiOperation(value = "删除标签 - 连同已标记的文章标签一并删除", notes = "删除标签签的接口")
-    @ApiImplicitParam(name = "tagId", value = "标签id", required = true, dataType = "String", paramType = "query")
+    @ApiImplicitParam(name = "tagId", value = "标签id", required = true, dataType = "java.lang.String", paramType = "query")
     public BlogJSONResult removeTag(String tagId) {
 
         if (StringUtils.isBlank(tagId)) {
@@ -143,7 +143,7 @@ public class UserTagController extends BasicController {
     @UserLoginToken
     @PostMapping(value = "/getArticleWithNoneTag")
     @ApiOperation(value = "获取无标签文章", notes = "获取无标签文章的接口")
-    @ApiImplicitParam(name = "userId", value = "用户id", required = true, dataType = "String", paramType = "query")
+    @ApiImplicitParam(name = "userId", value = "用户id", required = true, dataType = "java.lang.String", paramType = "query")
     public BlogJSONResult getArticleWithNoneTag(String userId) {
 
         if (StringUtils.isBlank(userId)) {
@@ -162,7 +162,7 @@ public class UserTagController extends BasicController {
     @UserLoginToken
     @PostMapping(value = "/getArticleTag")
     @ApiOperation(value = "获取标签文章", notes = "获取标签文章的接口")
-    @ApiImplicitParam(name = "tagId", value = "标签id", required = true, dataType = "String", paramType = "query")
+    @ApiImplicitParam(name = "tagId", value = "标签id", required = true, dataType = "java.lang.String", paramType = "query")
     public BlogJSONResult getArticleTag(String tagId) {
 
         if (StringUtils.isBlank(tagId)) {
@@ -180,7 +180,7 @@ public class UserTagController extends BasicController {
     @UserLoginToken
     @PostMapping(value = "/markArticleTag")
     @ApiOperation(value = "标记文章标签 - id字段请忽略", notes = "标记文章标签的接口")
-    @ApiImplicitParam(name = "articles2tags", value = "文章标签关联", required = true, dataType = "Articles2tags", paramType = "body")
+    @ApiImplicitParam(name = "articles2tags", value = "文章标签关联", required = true, dataType = "cn.fyupeng.pojo.Articles2tags", paramType = "body")
     public BlogJSONResult markArticleTag(@RequestBody Articles2tags articles2tags) {
 
         if (StringUtils.isBlank(articles2tags.getArticleId()) || StringUtils.isBlank(articles2tags.getTagId())) {
@@ -212,7 +212,7 @@ public class UserTagController extends BasicController {
     @UserLoginToken
     @PostMapping(value = "/reMarkArticleTag")
     @ApiOperation(value = "重新标记文章标签", notes = "重新标记文章标签的接口")
-    @ApiImplicitParam(name = "articles2tags", value = "文章标签关联", required = true, dataType = "Articles2tags", paramType = "body")
+    @ApiImplicitParam(name = "articles2tags", value = "文章标签关联", required = true, dataType = "cn.fyupeng.pojo.Articles2tags", paramType = "body")
     public BlogJSONResult reMarkArticleTag(@RequestBody Articles2tags articles2tags) {
 
         if (StringUtils.isBlank(articles2tags.getId())) {

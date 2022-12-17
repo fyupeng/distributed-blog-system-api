@@ -50,10 +50,10 @@ public class UserCommentController extends BasicController {
     @PostMapping(value = "/getAllComments")
     @ApiOperation(value = "获取文章所有评论", notes = "获取文章所有评论的接口")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "articleId", value = "文章id", required = true, dataType = "String", paramType = "query"),
-            @ApiImplicitParam(name = "page", value = "当前页", dataType = "Integer", paramType = "query"),
-            @ApiImplicitParam(name = "pageSize", value = "页数", dataType = "Integer", paramType = "query"),
-            @ApiImplicitParam(name = "sort", value = "排序-1-缺省[正序时间]-2[倒序时间]", dataType = "Integer", paramType = "query")
+            @ApiImplicitParam(name = "articleId", value = "文章id", required = true, dataType = "java.lang.String", paramType = "query"),
+            @ApiImplicitParam(name = "page", value = "当前页", dataType = "java.lang.Integer", paramType = "query"),
+            @ApiImplicitParam(name = "pageSize", value = "页数", dataType = "java.lang.Integer", paramType = "query"),
+            @ApiImplicitParam(name = "sort", value = "排序-1-缺省[正序时间]-2[倒序时间]", dataType = "java.lang.Integer", paramType = "query")
     })
     public BlogJSONResult getAllComments(String articleId, Integer page, Integer pageSize, Integer sort) {
 
@@ -83,7 +83,7 @@ public class UserCommentController extends BasicController {
     @UserLoginToken
     @PostMapping(value = "saveComment")
     @ApiOperation(value = "发表文章评论", notes = "发表文章评论的接口")
-    @ApiImplicitParam(name = "comment", value = "评论", required = true, dataType = "Comment", paramType = "body")
+    @ApiImplicitParam(name = "comment", value = "评论", required = true, dataType = "cn.fyupeng.pojo.Comment", paramType = "body")
     public BlogJSONResult saveComment(@RequestBody Comment comment) {
 
         if (StringUtils.isBlank(comment.getArticleId())) {
@@ -143,9 +143,9 @@ public class UserCommentController extends BasicController {
     @PostMapping(value = "/updateMyComment")
     @ApiOperation(value = "更新评论", notes = "更新评论的接口")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "commentId", value = "评论id", required = true, dataType = "String", paramType = "query"),
-            @ApiImplicitParam(name = "userId", value = "用户id", required = true, dataType = "String", paramType = "query"),
-            @ApiImplicitParam(name = "content", value = "更新内容", required = true, dataType = "String", paramType = "query")
+            @ApiImplicitParam(name = "commentId", value = "评论id", required = true, dataType = "java.lang.String", paramType = "query"),
+            @ApiImplicitParam(name = "userId", value = "用户id", required = true, dataType = "java.lang.String", paramType = "query"),
+            @ApiImplicitParam(name = "content", value = "更新内容", required = true, dataType = "java.lang.String", paramType = "query")
     })
     public BlogJSONResult updateMyComment(String commentId, String userId, String content) {
 
@@ -177,8 +177,8 @@ public class UserCommentController extends BasicController {
     @PostMapping(value = "/removeMyComment")
     @ApiOperation(value = "删除评论 - 已废弃", notes = "删除评论的接口")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "commentId", value = "评论id", required = true, dataType = "String", paramType = "query"),
-            @ApiImplicitParam(name = "userId", value = "用户id", required = true, dataType = "String", paramType = "query")
+            @ApiImplicitParam(name = "commentId", value = "评论id", required = true, dataType = "java.lang.String", paramType = "query"),
+            @ApiImplicitParam(name = "userId", value = "用户id", required = true, dataType = "java.lang.String", paramType = "query")
     })
     public BlogJSONResult removeMyComment(String commentId, String userId) {
 
@@ -208,8 +208,8 @@ public class UserCommentController extends BasicController {
     @PostMapping(value = "/rollbackMyComment")
     @ApiOperation(value = "撤回评论", notes = "撤回评论的接口")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "commentId", value = "评论id", required = true, dataType = "String", paramType = "query"),
-            @ApiImplicitParam(name = "userId", value = "用户id", required = true, dataType = "String", paramType = "query")
+            @ApiImplicitParam(name = "commentId", value = "评论id", required = true, dataType = "java.lang.String", paramType = "query"),
+            @ApiImplicitParam(name = "userId", value = "用户id", required = true, dataType = "java.lang.String", paramType = "query")
     })
     public BlogJSONResult rollbackMyComment(String commentId, String userId) {
 

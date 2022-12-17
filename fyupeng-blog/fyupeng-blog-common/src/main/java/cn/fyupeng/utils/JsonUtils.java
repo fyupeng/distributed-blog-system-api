@@ -1,5 +1,6 @@
 package cn.fyupeng.utils;
 
+import com.alibaba.fastjson2.JSONObject;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,7 +14,7 @@ import java.util.List;
  * @Description: 自定义响应结构, 转换类
  * Copyright: Copyright (c) 2016
  * Company:Nathan.Lee.Salvatore
- * 
+ *
  * @author leechenxiang
  * @date 2016年4月29日 下午11:05:03
  * @version V1.0
@@ -22,6 +23,16 @@ public class JsonUtils {
 
     // 定义jackson对象
     private static final ObjectMapper MAPPER = new ObjectMapper();
+
+    /**
+     * 字符串转JSONObject
+     * @param str 传入的json格式字符串
+     * @return  JSONObject
+     */
+    public static JSONObject stringToJSONObject(String str){
+        JSONObject jsonObject = JSONObject.parseObject(str);
+        return jsonObject;
+    }
 
     /**
      * 将对象转换成json字符串。
@@ -76,5 +87,5 @@ public class JsonUtils {
     	
     	return null;
     }
-    
+
 }

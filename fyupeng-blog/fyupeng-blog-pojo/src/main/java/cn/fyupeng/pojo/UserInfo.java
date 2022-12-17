@@ -20,7 +20,7 @@ public class UserInfo implements Serializable {
     @ApiModelProperty(value = "用户标识符[id]", required = true)
     private String userId;
 
-    @ApiModelProperty(value = "性别")
+    @ApiModelProperty(value = "性别", example = "0[女]/1[男]")
     private Integer sex;
 
     /**
@@ -32,25 +32,25 @@ public class UserInfo implements Serializable {
     /**
      * 名称
      */
-    @ApiModelProperty(value = "别名")
+    @ApiModelProperty(value = "别名", example = "托尼老师")
     private String nickname;
 
     /**
      * 电话
      */
-    @ApiModelProperty(value = "电话号码")
+    @ApiModelProperty(value = "电话号码", example = "13015485388")
     private String tel;
 
     /**
      * 邮箱
      */
-    @ApiModelProperty(value = "邮箱")
+    @ApiModelProperty(value = "邮箱", example = "fyp010311@163.com")
     private String email;
 
     /**
      * 个人描述
      */
-    @ApiModelProperty(value = "个人描述")
+    @ApiModelProperty(value = "个人描述", example = "这是个人描述....")
     private String description;
 
     public UserInfo() {

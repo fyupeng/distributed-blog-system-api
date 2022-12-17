@@ -11,19 +11,19 @@ public class Tag implements Serializable {
     /**
      * 主键
      */
-    @ApiModelProperty(value = "标签标识符[id]")
+    @ApiModelProperty(value = "标签标识符[id], 影响结果一致性的操作使用到该字段")
     private String id;
 
     /**
      * 标签名
      */
-    @ApiModelProperty(value = "文章标签名", required = true)
+    @ApiModelProperty(value = "文章标签名", required = true, example = "Java/Linux")
     private String name;
 
     /**
      * 用户id
      */
-    @ApiModelProperty(value = "用户id")
+    @ApiModelProperty(value = "用户id", example = "123456789")
     private String userId;
 
     public Tag() {

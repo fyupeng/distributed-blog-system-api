@@ -11,7 +11,7 @@ public class Article implements Serializable {
     /**
      * 主键
      */
-    @ApiModelProperty(value = "articleId, 使用前该字段必须已存在")
+    @ApiModelProperty(value = "文章id, 影响结果一致性的操作使用到该字段")
     private String id;
 
     /**

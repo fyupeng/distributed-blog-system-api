@@ -54,10 +54,10 @@ public class UserArticleController extends BasicController {
     @PostMapping(value = "/getAllArticles")
     @ApiOperation(value = "查找文章信息", notes = "查找文章信息的接口")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "searchKey", value = "搜索关键字", required = true, dataType = "String", paramType = "query"),
-            @ApiImplicitParam(name = "page", value = "当前页", required = false, dataType = "String", paramType = "query"),
-            @ApiImplicitParam(name = "pageSize", value = "页大小", required = false, dataType = "String", paramType = "query"),
-            @ApiImplicitParam(name = "userId", value = "用户id", required = true, dataType = "String", paramType = "query")
+            @ApiImplicitParam(name = "searchKey", value = "搜索关键字", required = true, dataType = "java.lang.String", paramType = "query"),
+            @ApiImplicitParam(name = "page", value = "当前页", required = false, dataType = "java.lang.String", paramType = "query"),
+            @ApiImplicitParam(name = "pageSize", value = "页大小", required = false, dataType = "java.lang.String", paramType = "query"),
+            @ApiImplicitParam(name = "userId", value = "用户id", required = true, dataType = "java.lang.String", paramType = "query")
     })
     public BlogJSONResult getAllArticles(String searchKey, Integer page, Integer pageSize, String userId) {
         if (StringUtils.isBlank(userId) || StringUtils.isBlank(searchKey)) {
@@ -136,8 +136,8 @@ public class UserArticleController extends BasicController {
     @PostMapping(value = "/getRecentArticles")
     @ApiOperation(value = "获取最近文章", notes = "获取最近文章的接口")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "page", value = "当前页", dataType = "String", paramType = "query"),
-            @ApiImplicitParam(name = "pageSize", value = "页大小", dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "page", value = "当前页", dataType = "java.lang.String", paramType = "query"),
+            @ApiImplicitParam(name = "pageSize", value = "页大小", dataType = "java.lang.String", paramType = "query"),
     })
     public BlogJSONResult getRecentArticles(Integer page, Integer pageSize) {
 
@@ -170,8 +170,8 @@ public class UserArticleController extends BasicController {
     @PostMapping(value = "/getHotArticles")
     @ApiOperation(value = "获取推荐文章", notes = "获取推荐文章的接口")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "page", value = "当前页", dataType = "String", paramType = "query"),
-            @ApiImplicitParam(name = "pageSize", value = "页大小", dataType = "String", paramType = "query")
+            @ApiImplicitParam(name = "page", value = "当前页", dataType = "java.lang.String", paramType = "query"),
+            @ApiImplicitParam(name = "pageSize", value = "页大小", dataType = "java.lang.String", paramType = "query")
     })
     public BlogJSONResult getHotArticles(Integer page, Integer pageSize) {
 
@@ -226,7 +226,7 @@ public class UserArticleController extends BasicController {
     @UserLoginToken
     @PostMapping(value = "/getSearchHistory")
     @ApiOperation(value = "获取搜索历史记录", notes = "获取搜索历史记录的接口")
-    @ApiImplicitParam(name = "userId",  value = "用户id",required = true, dataType = "String", paramType = "query")
+    @ApiImplicitParam(name = "userId",  value = "用户id",required = true, dataType = "java.lang.String", paramType = "query")
     public BlogJSONResult getSearchHistory(String userId) {
         List<String> searchHistoryList = querySearchHistory(userId);
         return BlogJSONResult.ok(searchHistoryList);
@@ -236,8 +236,8 @@ public class UserArticleController extends BasicController {
     @PostMapping(value = "/removeHistory")
     @ApiOperation(value = "删除搜索历史记录", notes = "删除搜索历史记录的接口")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "userId",  value = "用户id",required = true, dataType = "String", paramType = "query"),
-            @ApiImplicitParam(name = "searchKey",  value = "搜索关键字",required = true, dataType = "String", paramType = "query")
+            @ApiImplicitParam(name = "userId",  value = "用户id",required = true, dataType = "java.lang.String", paramType = "query"),
+            @ApiImplicitParam(name = "searchKey",  value = "搜索关键字",required = true, dataType = "java.lang.String", paramType = "query")
     })
     public BlogJSONResult removeHistory(String userId, String searchKey) {
 
@@ -333,8 +333,8 @@ public class UserArticleController extends BasicController {
     @PostMapping(value = "/getHotSearchKey")
     @ApiOperation(value = "获取关键字热度", notes = "获取关键字热度的接口")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "searchKey", value = "搜索关键字-缺省则匹配热度", dataType = "String", paramType = "query"),
-            @ApiImplicitParam(name = "size", value = "检索数-缺省为10", dataType = "String", paramType = "query")
+            @ApiImplicitParam(name = "searchKey", value = "搜索关键字-缺省则匹配热度", dataType = "java.lang.String", paramType = "query"),
+            @ApiImplicitParam(name = "size", value = "检索数-缺省为10", dataType = "java.lang.String", paramType = "query")
     })
     public BlogJSONResult getHotPot(String searchKey, Integer size) {
         if (StringUtils.isNotBlank(searchKey)) {
@@ -426,7 +426,7 @@ public class UserArticleController extends BasicController {
     @PostMapping(value = "/getArticleDetail")
     @ApiOperation(value = "获取文章详细信息", notes = "获取文章详细信息的接口")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "articleId", value = "文章id", required = true, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "articleId", value = "文章id", required = true, dataType = "java.lang.String", paramType = "query"),
             //@ApiImplicitParam(name = "request",value = "请求", dataType = "HttpServletRequest", readOnly = true)
     })
 
@@ -466,7 +466,7 @@ public class UserArticleController extends BasicController {
     @UserLoginToken
     @PostMapping(value = "/saveArticle")
     @ApiOperation(value = "保存文章信息 - id 字段请忽略", notes = "保存文章信息的接口")
-    @ApiImplicitParam(name = "article", value = "文章", required = true, dataType = "Article", paramType = "body")
+    @ApiImplicitParam(name = "article", value = "文章", required = true, dataType = "cn.fyupeng.pojo.Article", paramType = "body")
     public BlogJSONResult saveArticle(@RequestBody Article article) {
 
 
@@ -496,7 +496,7 @@ public class UserArticleController extends BasicController {
     @UserLoginToken
     @PostMapping(value = "/updateArticle")
     @ApiOperation(value = "更新文章信息", notes = "更新文章信息的接口")
-    @ApiImplicitParam(name = "article", value = "文章", required = true, dataType = "Article", paramType = "body")
+    @ApiImplicitParam(name = "article", value = "文章", required = true, dataType = "cn.fyupeng.pojo.Article", paramType = "body")
     public BlogJSONResult updateArticle(@RequestBody  Article article) {
 
         if (StringUtils.isBlank(article.getId()) || StringUtils.isBlank(article.getUserId())) {
@@ -544,8 +544,8 @@ public class UserArticleController extends BasicController {
     @PostMapping(value = "/removeArticle")
     @ApiOperation(value = "删除文章", notes = "删除文章的接口")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "articleId", value = "文章id", required = true, dataType = "String", paramType = "query"),
-            @ApiImplicitParam(name = "userId", value = "用户id", required = true, dataType = "String", paramType = "query")
+            @ApiImplicitParam(name = "articleId", value = "文章id", required = true, dataType = "java.lang.String", paramType = "query"),
+            @ApiImplicitParam(name = "userId", value = "用户id", required = true, dataType = "java.lang.String", paramType = "query")
     })
 
     public BlogJSONResult removeArticle(String articleId, String userId) {

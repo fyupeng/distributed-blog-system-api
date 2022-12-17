@@ -11,13 +11,13 @@ public class Picture implements Serializable {
     /**
      * 主键
      */
-    @ApiModelProperty(value = "图片标识符[id]")
+    @ApiModelProperty(hidden = true)
     private String id;
 
     /**
      * 上传的图片用户id
      */
-    @ApiModelProperty(value = "用户标识符[id]", required = true)
+    @ApiModelProperty(value = "用户标识符[id]", required = true, example = "123456789")
     private String userId;
 
     /**
@@ -29,19 +29,19 @@ public class Picture implements Serializable {
     /**
      * 图片描述
      */
-    @ApiModelProperty(value = "图片描述", required = true)
+    @ApiModelProperty(value = "图片描述", required = true, example = "这是图片描述....")
     private String pictureDesc;
 
     /**
      * 图片宽度
      */
-    @ApiModelProperty(value = "图片宽度")
+    @ApiModelProperty(value = "图片宽度", example = "111.11")
     private Double pictureWidth;
 
     /**
      * 图片高度
      */
-    @ApiModelProperty(value = "图片高度")
+    @ApiModelProperty(value = "图片高度", example = "111.11")
     private Double pictureHeight;
 
     /**

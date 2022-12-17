@@ -1,6 +1,5 @@
 package cn.fyupeng.controller.user;
 
-import cn.fyupeng.annotion.PassToken;
 import cn.fyupeng.anotion.Reference;
 import cn.fyupeng.controller.BasicController;
 import cn.fyupeng.annotion.UserLoginToken;
@@ -12,11 +11,9 @@ import cn.fyupeng.utils.MD5Utils;
 import cn.fyupeng.utils.RedisUtils;
 import cn.fyupeng.utils.TokenUtils;
 import com.auth0.jwt.JWT;
-import com.sun.corba.se.spi.servicecontext.UEInfoServiceContext;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
-import jdk.nashorn.internal.parser.Token;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
@@ -44,7 +41,7 @@ public class UserRegisterAndLoginController extends BasicController {
      * @throws Exception
      */
     @ApiOperation(value = "用户注册", notes = "用户注册的接口")
-    @ApiImplicitParam(name = "user", value = "用户", required = true, dataType = "User", paramType = "body")
+    @ApiImplicitParam(name = "user", value = "用户", required = true, dataType = "cn.fyupeng.pojo.User", paramType = "body")
     @PostMapping(value = "/regist")
     public BlogJSONResult regist(@RequestBody User user) throws Exception {
 
@@ -91,7 +88,7 @@ public class UserRegisterAndLoginController extends BasicController {
      * @throws Exception
      */
     @ApiOperation(value = "用户登录", notes = "用户登录的接口")
-    @ApiImplicitParam(name = "user", value = "用户", required = true, dataType = "User", paramType = "body")
+    @ApiImplicitParam(name = "user", value = "用户", required = true, dataType = "cn.fyupeng.pojo.User", paramType = "body")
     @PostMapping(value = "/login")
     public BlogJSONResult login(@RequestBody User user) throws Exception {
         String username = user.getUsername();
@@ -115,7 +112,7 @@ public class UserRegisterAndLoginController extends BasicController {
 
     @UserLoginToken
     @ApiOperation(value = "更新秘钥", notes = "用户更新秘钥的接口")
-    @ApiImplicitParam(name = "token", value = "秘钥", required = true, dataType = "String", paramType = "query")
+    @ApiImplicitParam(name = "token", value = "秘钥", required = true, dataType = "java.lang.String", paramType = "query")
     @PostMapping(value = "/updateToken")
     public BlogJSONResult updateToken(String token) throws Exception {
 
@@ -151,7 +148,7 @@ public class UserRegisterAndLoginController extends BasicController {
 
     @UserLoginToken
     @ApiOperation(value = "用户注销", notes = "用户注销的接口")
-    @ApiImplicitParam(name = "userId", value = "用户id", required = true, dataType = "String", paramType = "query")
+    @ApiImplicitParam(name = "userId", value = "用户id", required = true, dataType = "java.lang.String", paramType = "query")
     @PostMapping(value = "/logout")
     public BlogJSONResult logout(String userId) throws Exception {
 

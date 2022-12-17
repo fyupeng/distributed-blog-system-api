@@ -49,8 +49,8 @@ public class AdminCommentController extends BasicController {
     @PostMapping(value = "removeComment")
     @ApiOperation(value = "强制删除评论", notes = "强制删除评论的接口")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "commentId", value = "评论id", required = true, dataType = "String", paramType = "query"),
-            @ApiImplicitParam(name = "userId", value = "用户id", required = true, dataType = "String", paramType = "query")
+            @ApiImplicitParam(name = "commentId", value = "评论id", required = true, dataType = "java.lang.String", paramType = "query"),
+            @ApiImplicitParam(name = "userId", value = "用户id", required = true, dataType = "java.lang.String", paramType = "query")
     })
     public BlogJSONResult removeComment(String commentId, String userId) {
 
@@ -80,11 +80,11 @@ public class AdminCommentController extends BasicController {
     @PostMapping(value = "/filterComments")
     @ApiOperation(value = "过滤查询评论", notes = "过滤查询评论的接口")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "aPattern", value = "文章匹配", dataType = "String", paramType = "query"),
-            @ApiImplicitParam(name = "cPattern", value = "评论匹配", dataType = "String", paramType = "query"),
-            @ApiImplicitParam(name = "userId", value = "用户id", dataType = "String", paramType = "query"),
-            @ApiImplicitParam(name = "startTime", value = "评论开始时间 - yyyy-MM-dd HH:mm:ss", required = true, dataType = "String", paramType = "query"),
-            @ApiImplicitParam(name = "endTime", value = "评论结束时间 - yyyy-MM-dd HH:mm:ss", required = true, dataType = "String", paramType = "query")
+            @ApiImplicitParam(name = "aPattern", value = "文章匹配", dataType = "java.lang.String", paramType = "query"),
+            @ApiImplicitParam(name = "cPattern", value = "评论匹配", dataType = "java.lang.String", paramType = "query"),
+            @ApiImplicitParam(name = "userId", value = "用户id", dataType = "java.lang.String", paramType = "query"),
+            @ApiImplicitParam(name = "startTime", value = "评论开始时间 - yyyy-MM-dd HH:mm:ss", required = true, dataType = "java.lang.String", paramType = "query"),
+            @ApiImplicitParam(name = "endTime", value = "评论结束时间 - yyyy-MM-dd HH:mm:ss", required = true, dataType = "java.lang.String", paramType = "query")
     })
     public BlogJSONResult filterComments(String aPattern, String cPattern, String userId, String startTime, String endTime) {
 
@@ -122,9 +122,9 @@ public class AdminCommentController extends BasicController {
     @PostMapping(value = "/setCommentStatus")
     @ApiOperation(value = "屏蔽评论 - 1 正常 - 2 屏蔽", notes = "屏蔽评论的接口")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "commentId", value = "评论id", dataType = "Integer", paramType = "query"),
-            @ApiImplicitParam(name = "status", value = "评论状态", dataType = "String", paramType = "query"),
-            @ApiImplicitParam(name = "userId", value = "用户id", dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "commentId", value = "评论id", dataType = "java.lang.Integer", paramType = "query"),
+            @ApiImplicitParam(name = "status", value = "评论状态", dataType = "java.lang.String", paramType = "query"),
+            @ApiImplicitParam(name = "userId", value = "用户id", dataType = "java.lang.String", paramType = "query"),
     })
     public BlogJSONResult setCommentStatus(String commentId, Integer status, String userId) {
 

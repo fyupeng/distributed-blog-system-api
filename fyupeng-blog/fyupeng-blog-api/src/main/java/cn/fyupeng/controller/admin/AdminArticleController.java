@@ -59,8 +59,8 @@ public class AdminArticleController extends BasicController {
     @PostMapping(value = "/removeClassfication")
     @ApiOperation(value = "删除文章分类 - 注意: 文章分类为所有用户公共的分类，方便查询，私有分类情使用标签", notes = "删除文章分类的接口")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "classficationId", value = "文章分类id", required = true, dataType = "String", paramType = "query"),
-            @ApiImplicitParam(name = "userId", value = "用户id", required = true, dataType = "String", paramType = "query")
+            @ApiImplicitParam(name = "classficationId", value = "文章分类id", required = true, dataType = "java.lang.String", paramType = "query"),
+            @ApiImplicitParam(name = "userId", value = "用户id", required = true, dataType = "java.lang.String", paramType = "query")
 
     })
     public BlogJSONResult removeClassfication(String classficationId, String userId) {
@@ -92,8 +92,8 @@ public class AdminArticleController extends BasicController {
     @PostMapping(value = "/updateClassfication")
     @ApiOperation(value = "更新文章分类", notes = "更新文章分类的接口")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "classfication", value = "文章分类", required = true, dataType = "Classfication", paramType = "body"),
-            @ApiImplicitParam(name = "userId", value = "用户id", required = true, dataType = "String", paramType = "query")
+            @ApiImplicitParam(name = "classfication", value = "文章分类", required = true, dataType = "cn.fyupeng.pojo.Classfication", paramType = "body"),
+            @ApiImplicitParam(name = "userId", value = "用户id", required = true, dataType = "java.lang.String", paramType = "query")
 
     })
     public BlogJSONResult updateClassfication(@RequestBody Classfication classfication, String userId) {
@@ -117,8 +117,8 @@ public class AdminArticleController extends BasicController {
     @PostMapping(value = "/saveClassfication")
     @ApiOperation(value = "新建文章分类", notes = "新建文章分类的接口")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "classficationName", value = "分类名", required = true, dataType = "String", paramType = "query"),
-            @ApiImplicitParam(name = "userId", value = "用户id", required = true, dataType = "String", paramType = "query")
+            @ApiImplicitParam(name = "classficationName", value = "分类名", required = true, dataType = "java.lang.String", paramType = "query"),
+            @ApiImplicitParam(name = "userId", value = "用户id", required = true, dataType = "java.lang.String", paramType = "query")
     })
 
     public BlogJSONResult saveClassFication(String classficationName, String userId) {
@@ -149,7 +149,7 @@ public class AdminArticleController extends BasicController {
     @UserLoginToken
     @PostMapping(value = "/startTimeTask")
     @ApiOperation(value = "开启任务 - 自动更新阅读量", notes = "开启任务的接口")
-    @ApiImplicitParam(name = "userId", value = "用户id", required = true, dataType = "String", paramType = "query")
+    @ApiImplicitParam(name = "userId", value = "用户id", required = true, dataType = "java.lang.String", paramType = "query")
     public BlogJSONResult startTimeTask(String userId) {
 
         if (StringUtils.isBlank(userId)) {
@@ -208,7 +208,7 @@ public class AdminArticleController extends BasicController {
     @UserLoginToken
     @PostMapping(value = "/stopTimeTask")
     @ApiOperation(value = "关闭任务", notes = "关闭任务的接口")
-    @ApiImplicitParam(name = "userId", value = "用户id", required = true, dataType = "String", paramType = "query")
+    @ApiImplicitParam(name = "userId", value = "用户id", required = true, dataType = "java.lang.String", paramType = "query")
     public BlogJSONResult stopTimeTask(String userId) {
 
         if (StringUtils.isBlank(userId)) {

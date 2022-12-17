@@ -9,43 +9,43 @@ public class Comment implements Serializable {
     /**
      * 主键
      */
-    @ApiModelProperty(hidden = true)
+    @ApiModelProperty(value = "评论id, 影响结果一致性的操作使用到该字段", example = "123456789")
     private String id;
 
     /**
      * 自关联，评论父id，如果为null，则是直接发言
      */
-    @ApiModelProperty(value = "父评论标识符[id]")
+    @ApiModelProperty(value = "父评论标识符[id]", example = "123456789")
     private String fatherCommentId;
 
     /**
      * 被追问的用户id，如果为null,则是直接发言
      */
-    @ApiModelProperty(value = "被追问用户标识符[id]")
+    @ApiModelProperty(value = "被回复用户标识符[id]", example = "123456789")
     private String toUserId;
 
     /**
      * 文章id
      */
-    @ApiModelProperty(value = "评论文章标识符[id]", required = true)
+    @ApiModelProperty(value = "评论所属文章标识符[id]", required = true, example = "123456789")
     private String articleId;
 
     /**
      * 留言者，评论的用户id
      */
-    @ApiModelProperty(value = "留言者，评论用户标识符[id]", required = true)
+    @ApiModelProperty(value = "留言者，评论用户标识符[id]", required = true, example = "123456789")
     private String fromUserId;
 
     /**
      * 创建时间
      */
-    @ApiModelProperty(hidden = true)
+    @ApiModelProperty(hidden = true, example = "2018-12-04T13:46:56.711Z")
     private Date createTime;
 
     /**
      * 评论内容
      */
-    @ApiModelProperty(value = "评论内容", required = true)
+    @ApiModelProperty(value = "评论内容", required = true, example = "这是评论内容....")
     private String comment;
 
     /**
@@ -53,7 +53,7 @@ public class Comment implements Serializable {
      *  0 - 正常状态
      *  1 - 屏蔽
      */
-    @ApiModelProperty(value = "状态", hidden = true)
+    @ApiModelProperty(value = "状态", hidden = true, example = "0[表示评论处于正常状态]/1[表示评论被屏蔽]")
     private Integer status;
 
 
