@@ -531,6 +531,10 @@ public class UserArticleController extends BasicController {
                     return BlogJSONResult.errorMsg("分类id不存在");
                 ac.setClassId(article.getClassId());
             }
+            // 文章 封面 要更新
+            if (StringUtils.isNotBlank(article.getArticleCoverId())) {
+                ac.setArticleCoverId(article.getArticleCoverId());
+            }
             boolean updateIsTrue = articleServiceProxy.saveWithIdAndUserId(ac);
 
             return updateIsTrue ? BlogJSONResult.ok() : BlogJSONResult.errorMsg("内部错误更新失败");

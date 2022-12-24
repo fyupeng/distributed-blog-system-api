@@ -8,6 +8,7 @@ import cn.fyupeng.utils.TimeAgoUtils;
 import cn.fyupeng.pojo.vo.ArticleVO;
 import cn.fyupeng.service.ArticleService;
 import cn.fyupeng.anotion.Service;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.n3r.idworker.Sid;
 import org.springframework.beans.BeanUtils;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Field;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
@@ -34,6 +36,7 @@ import java.util.*;
 @SuppressWarnings("all")
 @Component
 @Service
+@Slf4j
 public class ArticleServiceImpl implements ArticleService {
 
     private static ArticleServiceImpl basicService;
@@ -55,6 +58,9 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Autowired
     private Articles2tagsMapper articles2tagsMapper;
+
+    @Autowired
+    private PictureMapper pictureMapper;
 
     @Autowired
     private Sid sid;
@@ -118,38 +124,44 @@ public class ArticleServiceImpl implements ArticleService {
         }
 
         ExampleMatcher matching = ExampleMatcher.matching();
-        Page<Article> all = null;
+        // 当前页记录
+        List<Article> all = null;
+        // 总 记录数
+        long records = 0;
 
         Article a = new Article();
+
+
 
         // 存在 分类名 为 key
         if (!StringUtils.isBlank(article.getClassId())) {
             all = readAndExcute("classId", matching, article, page, pageSize);
+            records = readAndExcuteCount("classId", matching, article, page, pageSize);
         } else {
             Article titleArticle = new Article();
             titleArticle.setTitle(article.getTitle());
             all = readAndExcute("title", matching, titleArticle, page, pageSize);
-            if (all.getTotalElements() == 0) {
+            records = readAndExcuteCount("classId", matching, article, page, pageSize);
+            if (all.size() == 0) {
                 Article summaryArticle = new Article();
                 summaryArticle.setSummary(article.getSummary());
                 all = readAndExcute("summary", matching, summaryArticle, page, pageSize);
-                if (all.getTotalElements() == 0) {
+                records = readAndExcuteCount("classId", matching, article, page, pageSize);
+                if (all.size() == 0) {
                     Article contentArticle = new Article();
                     contentArticle.setContent(article.getSummary());
                     all = readAndExcute("content", matching, contentArticle, page, pageSize);
-                    if (all.getTotalElements() == 0)
+                    records = readAndExcuteCount("classId", matching, article, page, pageSize);
+                    if (all.size() == 0)
                         return null;
                 }
             }
         }
-        // 总 记录数
-        long total = all.getTotalElements();
 
-        List<Article> content = all.getContent();
         List<ArticleVO> artileVOList = new ArrayList<>();
 
-        // 时间处理
-        for (Article ac : content) {
+        // 时间处理、其他处理
+        for (Article ac : all) {
             String createTimeAgo = TimeAgoUtils.format(ac.getCreateTime());
             String updateTimeAgo = TimeAgoUtils.format(ac.getUpdateTime());
             ArticleVO articleVO = new ArticleVO();
@@ -161,30 +173,37 @@ public class ArticleServiceImpl implements ArticleService {
             articleVO.setNormalUpdateTime(normalUpdateTime);
             articleVO.setCreateTimeAgoStr(createTimeAgo);
             articleVO.setUpdateTimeAgoStr(updateTimeAgo);
-            /**
-             * 查询量 太大，流量大，而且 用户 只是在 查询而已，不需要评论 和 内容
-             */
-            articleVO.setContent(null);
+
+            String articleCoverId = ac.getArticleCoverId();
+            if (!StringUtils.isBlank(articleCoverId)) {
+                Picture queryPicture = new Picture();
+                queryPicture.setId(articleCoverId);
+                Picture pictureInfo = basicService.pictureMapper.selectOne(queryPicture);
+                articleVO.setArticleCoverUrl(pictureInfo.getPicturePath());
+            }
             artileVOList.add(articleVO);
         }
 
         // 降序排序，最近发表的文章 放到了 最前面
         Collections.sort(artileVOList);
-
-        // 总 页数
-        int pages = all.getTotalPages();
+        // 总页数
+        int total = 1;
+        // 每页 大小 小于 总记录数 时才需要分页
+        if (pageSize < records) {
+            // 最后一页 还有 数据
+            if (records % pageSize != 0) {
+                total += records / pageSize;
+            } else {
+                total = (int) (records / pageSize);
+            }
+        }
 
         PagedResult pagedResult = new PagedResult();
-        // 设置 总记录数
-        pagedResult.setRecords(total);
-        // 设置 内容列表
-        //pagedResult.setRows(content); 原始数据
+        pagedResult.setTotal(total);
+        pagedResult.setRecords(records);
         pagedResult.setRows(artileVOList);
-
-        // 设置 当前页,转换为逻辑位置
+        // page 最后转换为 逻辑位置
         pagedResult.setPage(page+1);
-        // 设置 总页数
-        pagedResult.setTotal(pages);
 
         return pagedResult;
     }
@@ -405,6 +424,7 @@ public class ArticleServiceImpl implements ArticleService {
 
         queryAll.addCriteria(Criteria.where("createTime").gt(oneWekkAgodate));
         queryCurrentPage.addCriteria(Criteria.where("createTime").gt(oneWekkAgodate));
+        queryCurrentPage.fields().exclude("content");
 
         List<String> sortCondition = new ArrayList<>();
         sortCondition.add("createTime");
@@ -435,10 +455,14 @@ public class ArticleServiceImpl implements ArticleService {
             BeanUtils.copyProperties(ac, articleVO);
             articleVO.setCreateTimeAgoStr(createTimeAgo);
             articleVO.setUpdateTimeAgoStr(updateTimeAgo);
-            /**
-             * 查询量 太大，流量大，而且 用户 只是在 查询而已，不需要评论 和 内容
-             */
-            articleVO.setContent(null);
+
+            String articleCoverId = ac.getArticleCoverId();
+            if (!StringUtils.isBlank(articleCoverId)) {
+                Picture queryPicture = new Picture();
+                queryPicture.setId(articleCoverId);
+                Picture pictureInfo = basicService.pictureMapper.selectOne(queryPicture);
+                articleVO.setArticleCoverUrl(pictureInfo.getPicturePath());
+            }
             artileVOList.add(articleVO);
         }
 
@@ -502,6 +526,15 @@ public class ArticleServiceImpl implements ArticleService {
             articleVO.setNormalUpdateTime(normalUpdateTime);
             articleVO.setCreateTimeAgoStr(createTimeAgo);
             articleVO.setUpdateTimeAgoStr(updateTimeAgo);
+
+            String articleCoverId = ac.getArticleCoverId();
+            if (!StringUtils.isBlank(articleCoverId)) {
+                Picture queryPicture = new Picture();
+                queryPicture.setId(articleCoverId);
+                Picture pictureInfo = basicService.pictureMapper.selectOne(queryPicture);
+                articleVO.setArticleCoverUrl(pictureInfo.getPicturePath());
+            }
+
             /**
              * 查询量 太大，流量大，而且 用户 只是在 查询而已，不需要评论 和 内容
              */
@@ -558,12 +591,31 @@ public class ArticleServiceImpl implements ArticleService {
         return result == null ? false : true;
     }
 
+    private List<Article> readAndExcute(String property, ExampleMatcher matching, Article article, Integer page, Integer pageSize) {
+        ExampleMatcher exampleMatcher = matching.withMatcher(property, ExampleMatcher.GenericPropertyMatchers.contains());
 
-    private Page<Article> readAndExcute(String metcherProperty, ExampleMatcher matching, Article article, Integer page, Integer pageSize) {
-        ExampleMatcher exampleMatcher = matching.withMatcher(metcherProperty, ExampleMatcher.GenericPropertyMatchers.contains());
         Example<Article> articleExample = Example.of(article, exampleMatcher);
         Pageable pageable = PageRequest.of(page, pageSize);
-        return basicService.articleRepository.findAll(articleExample, pageable);
+
+        Query query = new Query();
+        query.addCriteria(Criteria.byExample(articleExample));
+        Sort sort = Sort.by(Sort.Direction.DESC, "createTime");
+        query.with(sort);
+        query.fields().exclude("content");
+        query.with(pageable);
+        return basicService.mongoTemplate.find(query, Article.class);
+    }
+
+    private long readAndExcuteCount(String property, ExampleMatcher matching, Article article, Integer page, Integer pageSize) {
+        ExampleMatcher exampleMatcher = matching.withMatcher(property, ExampleMatcher.GenericPropertyMatchers.contains());
+
+        Example<Article> articleExample = Example.of(article, exampleMatcher);
+        Pageable pageable = PageRequest.of(page, pageSize);
+
+        Query query = new Query();
+        query.addCriteria(Criteria.byExample(articleExample));
+        query.with(pageable);
+        return basicService.mongoTemplate.count(query, Article.class);
     }
 
 

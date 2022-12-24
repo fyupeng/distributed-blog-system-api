@@ -21,10 +21,16 @@ public class Tag implements Serializable {
     private String name;
 
     /**
-     * 用户id
+     * 用户 id
      */
     @ApiModelProperty(value = "用户id", example = "123456789")
     private String userId;
+
+    /**
+     * 标签封面 id
+     */
+    @ApiModelProperty(value = "标签封面id", example = "123456789")
+    private String tag_cover_id;
 
     public Tag() {
     }
@@ -73,12 +79,21 @@ public class Tag implements Serializable {
         this.userId = userId;
     }
 
+    public String getTag_cover_id() {
+        return tag_cover_id;
+    }
+
+    public void setTag_cover_id(String tag_cover_id) {
+        this.tag_cover_id = tag_cover_id;
+    }
+
     @Override
     public String toString() {
         return "Tag{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", userId='" + userId + '\'' +
+                ", tag_cover_id='" + tag_cover_id + '\'' +
                 '}';
     }
 }

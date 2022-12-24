@@ -11,7 +11,7 @@ public class Picture implements Serializable {
     /**
      * 主键
      */
-    @ApiModelProperty(hidden = true)
+    @ApiModelProperty(value = "文章id, 影响结果一致性的操作使用到该字段")
     private String id;
 
     /**

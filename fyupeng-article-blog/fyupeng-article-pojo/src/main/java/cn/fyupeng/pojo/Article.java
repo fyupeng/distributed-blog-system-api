@@ -41,6 +41,10 @@ public class Article implements Serializable {
     @Column(name = "receive_like_counts")
     private Integer receiveLikeCounts;
 
+    @Column(name = "article_cover_id")
+    private String articleCoverId;
+
+
     public Article() {
     }
 
@@ -198,6 +202,14 @@ public class Article implements Serializable {
         this.receiveLikeCounts = receiveLikeCounts;
     }
 
+    public String getArticleCoverId() {
+        return articleCoverId;
+    }
+
+    public void setArticleCoverId(String articleCoverId) {
+        this.articleCoverId = articleCoverId;
+    }
+
     @Override
     public String toString() {
         return "Article{" +
@@ -212,6 +224,7 @@ public class Article implements Serializable {
                 ", commentCounts=" + commentCounts +
                 ", readCounts=" + readCounts +
                 ", receiveLikeCounts=" + receiveLikeCounts +
+                ", articleCoverId='" + articleCoverId + '\'' +
                 '}';
     }
 }

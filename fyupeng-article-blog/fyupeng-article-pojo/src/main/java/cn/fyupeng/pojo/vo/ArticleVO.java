@@ -76,6 +76,8 @@ public class ArticleVO implements Comparable, Serializable {
     // 目前只做 一篇 文章 对于 一个 标签
     private String tagId;
     private String tagName;
+    private String articleCoverId;
+    private String articleCoverUrl;
 
     public ArticleVO() {
     }
@@ -240,6 +242,22 @@ public class ArticleVO implements Comparable, Serializable {
         this.tagName = tagName;
     }
 
+    public String getArticleCoverId() {
+        return articleCoverId;
+    }
+
+    public void setArticleCoverId(String articleCoverId) {
+        this.articleCoverId = articleCoverId;
+    }
+
+    public String getArticleCoverUrl() {
+        return articleCoverUrl;
+    }
+
+    public void setArticleCoverUrl(String articleCoverUrl) {
+        this.articleCoverUrl = articleCoverUrl;
+    }
+
     @Override
     public int compareTo(Object o) {
         return this.getCreateTime().getTime() > ((ArticleVO) o).getCreateTime().getTime() ? -1 : 1;
@@ -268,6 +286,8 @@ public class ArticleVO implements Comparable, Serializable {
                 ", avatar='" + avatar + '\'' +
                 ", tagId='" + tagId + '\'' +
                 ", tagName='" + tagName + '\'' +
+                ", articleCoverId='" + articleCoverId + '\'' +
+                ", articleCoverUrl='" + articleCoverUrl + '\'' +
                 '}';
     }
 }

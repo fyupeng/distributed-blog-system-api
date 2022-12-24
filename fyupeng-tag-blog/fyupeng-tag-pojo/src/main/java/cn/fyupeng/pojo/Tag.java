@@ -13,6 +13,9 @@ public class Tag implements Serializable {
     @Column(name = "user_id")
     private String userId;
 
+    @Column(name = "tag_cover_id")
+    private String tag_cover_id;
+
     public Tag() {
     }
 
@@ -58,12 +61,21 @@ public class Tag implements Serializable {
         this.userId = userId;
     }
 
+    public String getTag_cover_id() {
+        return tag_cover_id;
+    }
+
+    public void setTag_cover_id(String tag_cover_id) {
+        this.tag_cover_id = tag_cover_id;
+    }
+
     @Override
     public String toString() {
         return "Tag{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", userId='" + userId + '\'' +
+                ", tag_cover_id='" + tag_cover_id + '\'' +
                 '}';
     }
 }

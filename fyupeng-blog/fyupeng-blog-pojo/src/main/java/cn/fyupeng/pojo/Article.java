@@ -74,6 +74,12 @@ public class Article implements Serializable {
     @ApiModelProperty(hidden = true)
     private Integer receiveLikeCounts;
 
+    /**
+     *  文章封面id
+     */
+    @ApiModelProperty(value = "文章封面id")
+    private String articleCoverId;
+
 
     public Article() {
     }
@@ -276,6 +282,14 @@ public class Article implements Serializable {
         this.receiveLikeCounts = receiveLikeCounts;
     }
 
+    public String getArticleCoverId() {
+        return articleCoverId;
+    }
+
+    public void setArticleCoverId(String articleCoverId) {
+        this.articleCoverId = articleCoverId;
+    }
+
     @Override
     public String toString() {
         return "Article{" +
@@ -290,6 +304,7 @@ public class Article implements Serializable {
                 ", commentCounts=" + commentCounts +
                 ", readCounts=" + readCounts +
                 ", receiveLikeCounts=" + receiveLikeCounts +
+                ", articleCoverId='" + articleCoverId + '\'' +
                 '}';
     }
 }

@@ -1,9 +1,9 @@
 package cn.fyupeng.pojo;
 
+import javax.persistence.Column;
+import javax.persistence.Id;
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.*;
-import javax.swing.text.html.HTMLDocument;
 
 public class Picture implements Serializable {
     /**

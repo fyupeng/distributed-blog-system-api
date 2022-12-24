@@ -1,8 +1,9 @@
 package cn.fyupeng.pojo.vo;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class PictureVO {
+public class PictureVO implements Serializable {
     /**
      * 主键
      */
@@ -175,5 +176,19 @@ public class PictureVO {
 
     public void setUploadTimeAgoStr(String uploadTimeAgoStr) {
         this.uploadTimeAgoStr = uploadTimeAgoStr;
+    }
+
+    @Override
+    public String toString() {
+        return "PictureVO{" +
+                "id='" + id + '\'' +
+                ", userId='" + userId + '\'' +
+                ", picturePath='" + picturePath + '\'' +
+                ", pictureDesc='" + pictureDesc + '\'' +
+                ", pictureWidth=" + pictureWidth +
+                ", pictureHeight=" + pictureHeight +
+                ", uploadTime=" + uploadTime +
+                ", uploadTimeAgoStr='" + uploadTimeAgoStr + '\'' +
+                '}';
     }
 }

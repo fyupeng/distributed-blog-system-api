@@ -172,9 +172,9 @@ public class UserPictureController extends BasicController {
     @ApiOperation(value = "更改图片信息", notes = "更改图片信息的接口")
     @ApiImplicitParam(name = "picture", value = "图片", required = true, dataType = "cn.fyupeng.pojo.Picture", paramType = "body")
     @PostMapping(value = "/modifyePicture")
-    public BlogJSONResult modifyePicture(Picture picture) {
+    public BlogJSONResult modifyePicture(@RequestBody Picture picture) {
 
-        if (StringUtils.isBlank(picture.getUserId()) || StringUtils.isBlank(picture.getUserId())) {
+        if (StringUtils.isBlank(picture.getId()) || StringUtils.isBlank(picture.getUserId())) {
             return BlogJSONResult.errorMsg("图片id或用户id不能为空");
         }
 

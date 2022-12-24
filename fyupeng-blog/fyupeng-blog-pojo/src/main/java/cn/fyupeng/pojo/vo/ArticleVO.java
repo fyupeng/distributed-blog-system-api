@@ -1,5 +1,6 @@
 package cn.fyupeng.pojo.vo;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -9,7 +10,7 @@ import java.util.Date;
  * @Package: com.crop.pojo.vo
  * @Version: 1.0
  */
-public class ArticleVO implements Comparable {
+public class ArticleVO implements Comparable, Serializable {
 
     private String id;
 
@@ -75,6 +76,9 @@ public class ArticleVO implements Comparable {
     // 目前只做 一篇 文章 对于 一个 标签
     private String tagId;
     private String tagName;
+
+    private String articleCoverId;
+    private String articleCoverUrl;
 
     public ArticleVO() {
     }
@@ -239,6 +243,22 @@ public class ArticleVO implements Comparable {
         this.tagName = tagName;
     }
 
+    public String getArticleCoverId() {
+        return articleCoverId;
+    }
+
+    public void setArticleCoverId(String articleCoverId) {
+        this.articleCoverId = articleCoverId;
+    }
+
+    public String getArticleCoverUrl() {
+        return articleCoverUrl;
+    }
+
+    public void setArticleCoverUrl(String articleCoverUrl) {
+        this.articleCoverUrl = articleCoverUrl;
+    }
+
     @Override
     public int compareTo(Object o) {
         return this.getCreateTime().getTime() > ((ArticleVO) o).getCreateTime().getTime() ? -1 : 1;
@@ -267,6 +287,8 @@ public class ArticleVO implements Comparable {
                 ", avatar='" + avatar + '\'' +
                 ", tagId='" + tagId + '\'' +
                 ", tagName='" + tagName + '\'' +
+                ", articleCoverId='" + articleCoverId + '\'' +
+                ", articleCoverUrl='" + articleCoverUrl + '\'' +
                 '}';
     }
 }
