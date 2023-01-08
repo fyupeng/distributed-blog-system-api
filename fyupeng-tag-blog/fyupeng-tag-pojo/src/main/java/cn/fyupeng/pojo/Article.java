@@ -202,6 +202,14 @@ public class Article implements Serializable {
         this.receiveLikeCounts = receiveLikeCounts;
     }
 
+    public String getArticleCoverId() {
+        return articleCoverId;
+    }
+
+    public void setArticleCoverId(String articleCoverId) {
+        this.articleCoverId = articleCoverId;
+    }
+
     @Override
     public String toString() {
         return "Article{" +

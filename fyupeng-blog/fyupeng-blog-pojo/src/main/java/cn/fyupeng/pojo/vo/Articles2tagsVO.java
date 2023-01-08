@@ -30,6 +30,10 @@ public class Articles2tagsVO implements Serializable {
     public Articles2tagsVO() {
     }
 
+    private String articleCoverId;
+    private String articleCoverUrl;
+
+
     /**
      * 获取主键
      *
@@ -148,6 +152,22 @@ public class Articles2tagsVO implements Serializable {
         this.title = title;
     }
 
+    public String getArticleCoverId() {
+        return articleCoverId;
+    }
+
+    public void setArticleCoverId(String articleCoverId) {
+        this.articleCoverId = articleCoverId;
+    }
+
+    public String getArticleCoverUrl() {
+        return articleCoverUrl;
+    }
+
+    public void setArticleCoverUrl(String articleCoverUrl) {
+        this.articleCoverUrl = articleCoverUrl;
+    }
+
     @Override
     public String toString() {
         return "Articles2tagsVO{" +
@@ -162,6 +182,8 @@ public class Articles2tagsVO implements Serializable {
                 ", createTimeAgoStr='" + createTimeAgoStr + '\'' +
                 ", updateTimeAgoStr='" + updateTimeAgoStr + '\'' +
                 ", classficationName='" + classficationName + '\'' +
+                ", articleCoverId='" + articleCoverId + '\'' +
+                ", articleCoverUrl='" + articleCoverUrl + '\'' +
                 '}';
     }
 }

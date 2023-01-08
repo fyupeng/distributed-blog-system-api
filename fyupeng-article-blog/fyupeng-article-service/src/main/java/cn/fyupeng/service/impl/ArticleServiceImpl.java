@@ -2,7 +2,6 @@ package cn.fyupeng.service.impl;
 
 import cn.fyupeng.mapper.*;
 import cn.fyupeng.pojo.*;
-import cn.fyupeng.pojo.vo.Articles2tagsVO;
 import cn.fyupeng.utils.PagedResult;
 import cn.fyupeng.utils.TimeAgoUtils;
 import cn.fyupeng.pojo.vo.ArticleVO;
@@ -251,9 +250,9 @@ public class ArticleServiceImpl implements ArticleService {
             String aid = result.getId();
             Articles2tags articles2tags = new Articles2tags();
             articles2tags.setArticleId(aid);
-            List<Articles2tagsVO> select = queryArticleTag(articles2tags);
-            if (select.size() != 0) {
-                Tag tag = basicService.tagMapper.selectByPrimaryKey(select.get(0).getTagId());
+            articles2tags = queryArticleTag(articles2tags);
+            if (articles2tags != null)  {
+                Tag tag = basicService.tagMapper.selectByPrimaryKey(articles2tags.getTagId());
                 articleVO.setTagId(tag.getId());
                 articleVO.setTagName(tag.getName());
             }
@@ -272,56 +271,15 @@ public class ArticleServiceImpl implements ArticleService {
         return null;
     }
 
-    private List<Articles2tagsVO> queryArticleTag(Articles2tags articles2tags) {
+    private Articles2tags queryArticleTag(Articles2tags articles2tags) {
 
         List<Articles2tags> articles2tagsList = basicService.articles2tagsMapper.select(articles2tags);
 
-        for (Articles2tags tags : articles2tagsList) {
-            System.out.println(tags);
+        if (articles2tagsList.size() != 0) {
+
+            return articles2tagsList.get(0);
         }
-
-        List<Articles2tagsVO> articles2tagsVOList = new ArrayList<>();
-        for (Articles2tags articleTags : articles2tagsList) {
-
-            String articleId = articleTags.getArticleId();
-            String tagId = articleTags.getTagId();
-
-            Tag tag = basicService.tagMapper.selectByPrimaryKey(tagId);
-
-            Article article = new Article();
-            article.setId(articleId);
-
-            org.springframework.data.domain.Example<Article> articleExample = org.springframework.data.domain.Example.of(article);
-
-
-            Optional<Article> articleOptional = basicService.articleRepository.findOne(articleExample);
-            Article one = articleOptional.isPresent() ? articleOptional.get() : null;
-
-            if (one != null) {
-
-                Classfication classfication = basicService.classficationMapper.selectByPrimaryKey(one.getClassId());
-
-                Articles2tagsVO articles2tagsVO = new Articles2tagsVO();
-                BeanUtils.copyProperties(articleTags, articles2tagsVO);
-
-                articles2tagsVO.setTagName(tag.getName());
-                articles2tagsVO.setTitle(one.getTitle());
-                articles2tagsVO.setClassficationName(classfication.getName());
-                articles2tagsVO.setCommentCounts(one.getCommentCounts());
-                articles2tagsVO.setReadCounts(one.getReadCounts());
-                articles2tagsVO.setReceiveLikeCounts(one.getReceiveLikeCounts());
-
-                String createTimeAgo = TimeAgoUtils.format(one.getCreateTime());
-                String updateTimaAgo = TimeAgoUtils.format(one.getUpdateTime());
-
-                articles2tagsVO.setCreateTimeAgoStr(createTimeAgo);
-                articles2tagsVO.setUpdateTimeAgoStr(updateTimaAgo);
-
-                articles2tagsVOList.add(articles2tagsVO);
-            }
-        }
-
-        return articles2tagsVOList;
+        return null;
     }
 
     @Override
