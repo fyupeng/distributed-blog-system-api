@@ -1,18 +1,16 @@
 package cn.fyupeng.controller.user;
 
-import cn.fyupeng.anotion.Reference;
+import cn.fyupeng.annotation.Reference;
 import cn.fyupeng.controller.BasicController;
 import cn.fyupeng.annotion.PassToken;
 import cn.fyupeng.annotion.UserLoginToken;
 import cn.fyupeng.pojo.User;
 import cn.fyupeng.pojo.UserInfo;
-import cn.fyupeng.pojo.bo.UserForUpdateBO;
+import cn.fyupeng.pojo.vo.bo.UserForUpdateBO;
 import cn.fyupeng.pojo.vo.UserInfoVO;
 import cn.fyupeng.service.UserService;
 import cn.fyupeng.utils.BlogJSONResult;
-import cn.fyupeng.utils.JsonUtils;
 import cn.fyupeng.utils.MD5Utils;
-import com.alibaba.fastjson2.JSONObject;
 import io.swagger.annotations.*;
 import okhttp3.*;
 import org.apache.commons.io.IOUtils;
@@ -22,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;

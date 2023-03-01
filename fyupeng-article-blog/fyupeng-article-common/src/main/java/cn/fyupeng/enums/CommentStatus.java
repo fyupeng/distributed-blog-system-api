@@ -15,7 +15,7 @@ public enum CommentStatus {
     private Integer status;
     private String message;
 
-    CommentStatus(Integer status, String message) {
+    private CommentStatus(Integer status, String message) {
         this.status = status;
         this.message = message;
     }

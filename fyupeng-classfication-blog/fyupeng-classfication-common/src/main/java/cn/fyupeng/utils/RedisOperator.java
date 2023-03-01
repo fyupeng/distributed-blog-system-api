@@ -5,6 +5,7 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +17,7 @@ public class RedisOperator {
 
 //	@Autowired
 //    private RedisTemplate<String, Object> redisTemplate;
-
+	@Lazy
 	@Autowired
 	private StringRedisTemplate redisTemplate;
 

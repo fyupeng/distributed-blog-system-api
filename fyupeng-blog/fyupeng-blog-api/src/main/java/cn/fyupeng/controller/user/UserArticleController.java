@@ -1,6 +1,6 @@
 package cn.fyupeng.controller.user;
 
-import cn.fyupeng.anotion.Reference;
+import cn.fyupeng.annotation.Reference;
 import cn.fyupeng.controller.BasicController;
 import cn.fyupeng.annotion.PassToken;
 import cn.fyupeng.annotion.UserLoginToken;

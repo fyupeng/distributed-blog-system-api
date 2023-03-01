@@ -3,13 +3,39 @@
 ### 介绍
 提供多机器横向扩展服务、可靠性和可用性的 `api` 后端博客分布式管理项目
 
+前端节点：
+
+- NodeJs：`80`
+
+暴露节点：
+- Nginx代理：`8080`
+- 服务接口：`8081`
+- 服务接口：`8082`
+- 服务接口：`8083`
+- 服务接口：`8084`
+
 服务节点：
-- 统一暴露接口服务：`8001`
-- 用户服务：`8082`
-- 分类服务：`8083`
-- 文章服务：`8084`
-- 评论服务：`8085`
-- 标签服务：`8086`
+- 用户服务：`8081`（监控服务：`8091`)
+- 分类服务：`8082`（监控服务：`8092`)
+- 文章服务：`8083`（监控服务：`8093`)
+- 评论服务：`8084`（监控服务：`8094`)
+- 标签服务：`8085`（监控服务：`8095`)
+- 图片服务：`8086`（监控服务：`8096`)
+
+存储节点：
+
+- MySQL：`3306`
+- MongoDB：`27017`
+- Redis：`6379`
+
+复制节点：
+
+- MySQL：`3306`
+
+注册节点：
+- nacos：`8845`(grpc：`9845`、`9846`)
+- nacos：`8847`(grpc：`9847`、`9848`)
+- nacos：`8849`(grpc：`9849`、`9850`)
 
 ### 软件架构
 软件架构说明
@@ -18,14 +44,25 @@
 
 ![分布式前后端分离架构](https://yupeng-tuchuang.oss-cn-shenzhen.aliyuncs.com/分布式前后分离架构.png)
 
+- 项目分布式微服务架构：
+
+![分布式微服务架构](https://yupeng-tuchuang.oss-cn-shenzhen.aliyuncs.com/项目分布式微服务架构.png)
+
+
+
 - 项目RPC架构设计：
 
 ![分布式博客微服务架构](https://yupeng-tuchuang.oss-cn-shenzhen.aliyuncs.com/分布式博客微服务架构.png)
 
 提示：接口文档应用了`Nginx`代理技术，使用swagger-ui技术提供文档阅读，服务接口会代理不到真实服务。
 
-接口文档：[http://localhost:9001/swagger-ui.html](http://localhost:8083/swagger-ui.html)
+博客主页：[https://localhost:80/home](https://localhost:80/home)
 
+用户服务接口文档：[http://localhost:8081/swagger-ui/index.html](http://localhost:8081/swagger-ui/index.html)
+
+用户服务 Spring、SQL 监控 Web 端：[http://localhost:8091/druid/login.html](http://localhost:8091/druid/login.html)
+
+注册中心：[http://localhost:8848/nacos](http://localhost:8848/nacos)
 
 在架构设计中，一台服务器对外暴露接口，另一台作为存储信息服务，只对内提供服务接口，提高安全性。
 
@@ -106,6 +143,30 @@ http {
 
 热度搜索需要在前端做一个搜索，接着调用`api`将用户的搜索词汇放到`Redis`中，可以使用`zSet`，把时间戳当成`zSet`的权值，所以是有序的，可以获取近期的搜索，实现近期搜索（这里还可以将该关键字连同`userId`放到`Redis`做用户搜索记录），接着再使用`Redis`的`Hash`数据结构，将关键字作为`key`，`value`作为关键字搜索量，就能够做到近期热度搜索了。
 
+- 支持事务主从读写数据源自动切换
+
+使用自定义注解`cn.fyupeng.DataSourceSwitcher`，标注上的事务方法可以决定是读事务还是写事务。
+
+**实现**
+
+单机的不足：一个事务只能切换一种方式，如果事务中包含读写业务，只能选择一个数据源，也就是事务方法的数据源切换操作是原子性的。
+
+1. 自定义注解`cn.fyupeng.DataSourceSwitcher`，用于启用数据源主从切换；
+2. 配置`Spring`数据源的`Bean`，使用`DataSourceRouter`配置多个数据源`(key, DataSource)`来返回； 
+3. 使用`AOP`在需要开启的业务切点前后切入切面，使用`LocalThread`保存和移除数据源`key`；
+4. 继承`AbstractRoutingDataSource`并实现`determineCurrentLookupKey`方法，从`LocalThread`获取数据源`key`；
+
+> 提示：必须保证单个事务是单线程执行的，线程执行前后须保持一致性（如使用线程池复用线程）
+
+**解决方案**
+
+本质无法解决，从逻辑上解决，也就是试图降低事务粒度，将多个业务作为不同事务，这种拆分单机上无法解决，可以考虑分布式。
+
+这样保证了 MySQL 主从中，Master 负责完全写、Slave 负责完全读，Slave 只需要同步 Master 数据即可，就无需进行主主同步，避免了更多的性能损耗。
+
+
+
+
 - 支持多表单多文件与`json`数据上传
 
 传统表单无法同时支持请求头`Content-Type`中`application/json`与`multipart/form-data`请求，不用去解决类似`WebKitFormBoundary`、Convert转换器不支持复杂问题。
@@ -171,4 +232,7 @@ public class PictureForUploadBOConverter implements Converter<String, List<Pictu
 6. 客户端反射代理服务结果一致性问题（RPC如何判定数据完整性）；
 7. 解决大数据网络传输失败的问题（fastjson、kryo无法解决，推荐采用hessian作为序列化方式）；
 8. 解决重试超时抛出异常导致客户端处于结果不一致性的问题（采用advice监听所有异常，并以正常结果和异常信息返回，保证各种结果一致性）；
-9. 添加令牌访问，使得各种操作更加合理和高效（解决恶意的接口攻击）
+9. 添加令牌访问，使得各种操作更加合理和高效（解决恶意的接口攻击）；
+10. 解决 Spring 依赖注入、切面注解失效问题；
+11. 解决 Nacos2.1 注册中心集群无故端口占用问题；
+12. 解决事务中业务读写 MySQL 主从库事务读写粒度问题；

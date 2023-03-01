@@ -2,7 +2,7 @@ package cn.fyupeng.controller.user;
 
 import cn.fyupeng.annotion.PassToken;
 import cn.fyupeng.annotion.UserLoginToken;
-import cn.fyupeng.anotion.Reference;
+import cn.fyupeng.annotation.Reference;
 import cn.fyupeng.enums.CommentStatus;
 import cn.fyupeng.pojo.Comment;
 import cn.fyupeng.pojo.User;

@@ -1,7 +1,7 @@
 package cn.fyupeng.controller.admin;
 
 import cn.fyupeng.annotion.UserLoginToken;
-import cn.fyupeng.anotion.Reference;
+import cn.fyupeng.annotation.Reference;
 import cn.fyupeng.controller.BasicController;
 import cn.fyupeng.enums.CommentStatus;
 import cn.fyupeng.pojo.Comment;

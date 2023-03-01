@@ -1,12 +1,13 @@
 package cn.fyupeng;
 
 import cn.fyupeng.config.ResourceConfig;
-import cn.fyupeng.anotion.ServiceScan;
+import cn.fyupeng.annotation.ServiceScan;
 import cn.fyupeng.enums.SerializerCode;
 import cn.fyupeng.exception.RpcException;
 import cn.fyupeng.idworker.utils.JRedisHelper;
 import cn.fyupeng.net.netty.server.NettyServer;
 import cn.fyupeng.util.IpUtils;
+import cn.fyupeng.util.SpringContextUtil;
 import cn.fyupeng.utils.ResourceLoadUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +15,14 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import tk.mybatis.spring.annotation.MapperScan;
 
 import javax.annotation.PostConstruct;
 import java.util.Map;
+
 
 /**
  * @Auther: fyp
@@ -30,11 +35,14 @@ import java.util.Map;
 
 @Slf4j
 @ServiceScan
+@EnableAsync
+@EnableScheduling
 @MapperScan(basePackages = "cn.fyupeng.mapper")
 @SpringBootApplication
 @ComponentScan(basePackages = {"cn.fyupeng", "org.n3r.idworker"})
 public class UserServer implements CommandLineRunner {
 
+    @Lazy
     @Autowired
     private ResourceConfig resourceConfig;
 
@@ -60,7 +68,13 @@ public class UserServer implements CommandLineRunner {
         while(true){
             NettyServer nettyServer = null;
             try {
-                nettyServer = new NettyServer(resourceConfig.getServerIp(), resourceConfig.getServerPort(), SerializerCode.HESSIAN.getCode());
+                nettyServer = new NettyServer(resourceConfig.getServerIp(), resourceConfig.getServerPort(), SerializerCode.HESSIAN.getCode()) {
+
+                    @Override
+                    public Object newInstance(String fullName, String simpleName, String firstLowCaseName, Class<?> clazz) throws InstantiationException, IllegalAccessException {
+                        return SpringContextUtil.getBean(firstLowCaseName, clazz);
+                    }
+                };
             } catch (RpcException e) {
                 e.printStackTrace();
             }
@@ -71,4 +85,3 @@ public class UserServer implements CommandLineRunner {
     }
 
 }
-

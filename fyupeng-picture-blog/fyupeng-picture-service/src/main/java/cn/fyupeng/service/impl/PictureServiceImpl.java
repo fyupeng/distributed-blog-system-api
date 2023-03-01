@@ -1,6 +1,8 @@
 package cn.fyupeng.service.impl;
 
-import cn.fyupeng.anotion.Service;
+import cn.fyupeng.annotation.DataSourceSwitcher;
+import cn.fyupeng.annotation.Service;
+import cn.fyupeng.enums.DataSourceEnum;
 import cn.fyupeng.mapper.PictureMapper;
 import cn.fyupeng.pojo.Picture;
 import cn.fyupeng.pojo.vo.PictureVO;
@@ -12,6 +14,7 @@ import com.github.pagehelper.PageInfo;
 import org.n3r.idworker.Sid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,9 +38,11 @@ public class PictureServiceImpl implements PictureService {
 
     private static PictureServiceImpl basicService;
 
+    @Lazy
     @Autowired
     private Sid sid;
 
+    @Lazy
     @Autowired
     private PictureMapper pictureMapper;
 
@@ -47,6 +52,7 @@ public class PictureServiceImpl implements PictureService {
     }
 
     @Override
+    @DataSourceSwitcher(DataSourceEnum.SLAVE)
     @Transactional(propagation = Propagation.SUPPORTS)
     public boolean queryPictureIsExist(Picture picture) {
         List<Picture> result = basicService.pictureMapper.select(picture);
@@ -55,6 +61,7 @@ public class PictureServiceImpl implements PictureService {
     }
 
     @Override
+    @DataSourceSwitcher(DataSourceEnum.SLAVE)
     @Transactional(propagation = Propagation.SUPPORTS)
     public Picture queryPicture(Picture picture) {
 
@@ -65,6 +72,7 @@ public class PictureServiceImpl implements PictureService {
 
 
     @Override
+    @DataSourceSwitcher(DataSourceEnum.SLAVE)
     @Transactional(propagation = Propagation.SUPPORTS)
     public PagedResult getAllPictures(Picture picture, Integer page, Integer pageSize) {
 
@@ -110,6 +118,7 @@ public class PictureServiceImpl implements PictureService {
     }
 
     @Override
+    @DataSourceSwitcher(DataSourceEnum.MASTER)
     @Transactional(propagation = Propagation.REQUIRED)
     public boolean updatePicture(Picture picture) {
 
@@ -119,6 +128,7 @@ public class PictureServiceImpl implements PictureService {
     }
 
     @Override
+    @DataSourceSwitcher(DataSourceEnum.MASTER)
     @Transactional(propagation = Propagation.REQUIRED)
     public void upload(Picture picture) {
         String pictureId = basicService.sid.nextShort();
@@ -143,6 +153,7 @@ public class PictureServiceImpl implements PictureService {
     }
 
     @Override
+    @DataSourceSwitcher(DataSourceEnum.MASTER)
     @Transactional(propagation = Propagation.REQUIRED)
     public boolean deletePicture(Picture picture) {
 

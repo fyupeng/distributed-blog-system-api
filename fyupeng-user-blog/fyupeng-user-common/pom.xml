@@ -96,6 +96,13 @@
             <version>1.1.10</version>
         </dependency>
 
+        <!--  阿里的 json 序列化工具  -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.49</version>
+        </dependency>
+
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>

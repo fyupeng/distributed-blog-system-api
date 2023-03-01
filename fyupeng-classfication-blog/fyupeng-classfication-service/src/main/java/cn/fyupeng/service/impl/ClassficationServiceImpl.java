@@ -1,11 +1,14 @@
 package cn.fyupeng.service.impl;
 
+import cn.fyupeng.annotation.DataSourceSwitcher;
+import cn.fyupeng.enums.DataSourceEnum;
 import cn.fyupeng.mapper.ClassficationMapper;
 import cn.fyupeng.pojo.Classfication;
 import cn.fyupeng.service.ClassficationService;
-import cn.fyupeng.anotion.Service;
+import cn.fyupeng.annotation.Service;
 import org.n3r.idworker.Sid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,9 +32,11 @@ public class ClassficationServiceImpl implements ClassficationService {
 
     private static ClassficationServiceImpl basicService;
 
+    @Lazy
     @Autowired
     private ClassficationMapper classficationMapper;
 
+    @Lazy
     @Autowired
     private Sid sid;
 
@@ -41,6 +46,7 @@ public class ClassficationServiceImpl implements ClassficationService {
     }
 
     @Override
+    @DataSourceSwitcher(DataSourceEnum.SLAVE)
     @Transactional(propagation = Propagation.SUPPORTS)
     public boolean queryClassficationIdIsExist(String classId) {
 
@@ -55,6 +61,7 @@ public class ClassficationServiceImpl implements ClassficationService {
      * @return
      */
     @Override
+    @DataSourceSwitcher(DataSourceEnum.SLAVE)
     @Transactional(propagation = Propagation.SUPPORTS)
     public Classfication queryClassfication(Classfication classfication) {
 
@@ -64,6 +71,7 @@ public class ClassficationServiceImpl implements ClassficationService {
     }
 
     @Override
+    @DataSourceSwitcher(DataSourceEnum.SLAVE)
     @Transactional(propagation = Propagation.SUPPORTS)
     public List<Classfication> queryAllClassfications() {
 
@@ -82,6 +90,7 @@ public class ClassficationServiceImpl implements ClassficationService {
      * @param classfication
      */
     @Override
+    @DataSourceSwitcher(DataSourceEnum.MASTER)
     @Transactional(propagation = Propagation.REQUIRED)
     public boolean saveClassfication(Classfication classfication) {
 
@@ -95,6 +104,7 @@ public class ClassficationServiceImpl implements ClassficationService {
     }
 
     @Override
+    @DataSourceSwitcher(DataSourceEnum.MASTER)
     @Transactional(propagation = Propagation.REQUIRED)
     public boolean updateClassfication(Classfication clssfication) {
 
@@ -104,6 +114,7 @@ public class ClassficationServiceImpl implements ClassficationService {
     }
 
     @Override
+    @DataSourceSwitcher(DataSourceEnum.MASTER)
     @Transactional(propagation = Propagation.REQUIRED)
     public boolean deleteClassfication(String classficationId) {
 

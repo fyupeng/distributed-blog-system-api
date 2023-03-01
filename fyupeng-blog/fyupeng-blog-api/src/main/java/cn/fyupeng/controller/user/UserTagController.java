@@ -1,7 +1,7 @@
 package cn.fyupeng.controller.user;
 
 import cn.fyupeng.annotion.UserLoginToken;
-import cn.fyupeng.anotion.Reference;
+import cn.fyupeng.annotation.Reference;
 import cn.fyupeng.pojo.Articles2tags;
 import cn.fyupeng.pojo.Tag;
 import cn.fyupeng.pojo.vo.ArticleVO;

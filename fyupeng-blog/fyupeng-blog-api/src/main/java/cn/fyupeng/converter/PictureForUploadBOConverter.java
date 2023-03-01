@@ -1,7 +1,7 @@
 package cn.fyupeng.converter;
 
 
-import cn.fyupeng.pojo.bo.PictureForUploadBO;
+import cn.fyupeng.pojo.vo.bo.PictureForUploadBO;
 import cn.fyupeng.utils.JsonUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;

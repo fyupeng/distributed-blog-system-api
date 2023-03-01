@@ -2,21 +2,19 @@ package cn.fyupeng.controller.user;
 
 import cn.fyupeng.annotion.PassToken;
 import cn.fyupeng.annotion.UserLoginToken;
-import cn.fyupeng.anotion.Reference;
+import cn.fyupeng.annotation.Reference;
 import cn.fyupeng.controller.BasicController;
 import cn.fyupeng.pojo.Picture;
-import cn.fyupeng.pojo.bo.PictureForUploadBO;
+import cn.fyupeng.pojo.vo.bo.PictureForUploadBO;
 import cn.fyupeng.service.PictureService;
 import cn.fyupeng.service.UserService;
 import cn.fyupeng.utils.BlogJSONResult;
 import cn.fyupeng.utils.PagedResult;
 import io.swagger.annotations.*;
-import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 

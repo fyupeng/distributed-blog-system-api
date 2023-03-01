@@ -1,6 +1,6 @@
 package cn.fyupeng.controller.user;
 
-import cn.fyupeng.anotion.Reference;
+import cn.fyupeng.annotation.Reference;
 import cn.fyupeng.controller.BasicController;
 import cn.fyupeng.annotion.UserLoginToken;
 import cn.fyupeng.pojo.User;
@@ -17,6 +17,8 @@ import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @Auther: fyp
@@ -112,15 +114,15 @@ public class UserRegisterAndLoginController extends BasicController {
 
     @UserLoginToken
     @ApiOperation(value = "更新秘钥", notes = "用户更新秘钥的接口")
-    @ApiImplicitParam(name = "token", value = "秘钥", required = true, dataType = "java.lang.String", paramType = "query")
+    @ApiImplicitParam(name = "request", value = "请求", dataType = "javax.servlet.http.HttpServletRequest", paramType = "query", readOnly = true)
     @PostMapping(value = "/updateToken")
-    public BlogJSONResult updateToken(String token) throws Exception {
+    public BlogJSONResult updateToken(HttpServletRequest request) throws Exception {
 
         String userId;
         String username;
         String password;
+        String token = request.getHeader("token");
 
-        System.out.println(token);
 
         userId = JWT.decode(token).getClaim("userId").asString();
         username = JWT.decode(token).getClaim("username").asString();

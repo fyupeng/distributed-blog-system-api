@@ -6,6 +6,7 @@ import cn.fyupeng.proxy.RpcClientProxy;
 import cn.fyupeng.serializer.CommonSerializer;
 import cn.fyupeng.utils.RedisOperator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,6 +21,7 @@ public class BasicController {
 
     protected RpcClientProxy rpcClientProxy = new RpcClientProxy(nettyClient);
 
+    @Lazy
     @Autowired
     public RedisOperator redis;
 

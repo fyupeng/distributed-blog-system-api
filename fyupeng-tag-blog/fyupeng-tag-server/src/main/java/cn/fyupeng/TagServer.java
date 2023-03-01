@@ -1,7 +1,7 @@
 package cn.fyupeng;
 
 import cn.fyupeng.config.ResourceConfig;
-import cn.fyupeng.anotion.ServiceScan;
+import cn.fyupeng.annotation.ServiceScan;
 import cn.fyupeng.enums.SerializerCode;
 import cn.fyupeng.exception.RpcException;
 import cn.fyupeng.net.netty.server.NettyServer;
@@ -12,6 +12,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import tk.mybatis.spring.annotation.MapperScan;
 
@@ -29,12 +31,15 @@ import java.util.Map;
 
 @Slf4j
 @ServiceScan
+@EnableAsync
+@EnableScheduling
 @SpringBootApplication
 @MapperScan(basePackages = "cn.fyupeng.mapper")
 @ComponentScan(basePackages = {"cn.fyupeng", "org.n3r.idworker"})
 public class TagServer implements CommandLineRunner {
 
 
+    @Lazy
     @Autowired
     private ResourceConfig resourceConfig;
 

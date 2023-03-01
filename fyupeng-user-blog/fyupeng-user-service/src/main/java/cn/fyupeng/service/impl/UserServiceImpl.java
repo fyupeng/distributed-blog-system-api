@@ -1,13 +1,16 @@
 package cn.fyupeng.service.impl;
 
+import cn.fyupeng.annotation.DataSourceSwitcher;
+import cn.fyupeng.enums.DataSourceEnum;
 import cn.fyupeng.mapper.UserInfoMapper;
 import cn.fyupeng.mapper.UserMapper;
 import cn.fyupeng.pojo.User;
 import cn.fyupeng.pojo.UserInfo;
 import cn.fyupeng.service.UserService;
-import cn.fyupeng.anotion.Service;
+import cn.fyupeng.annotation.Service;
 import org.n3r.idworker.Sid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,12 +27,15 @@ public class UserServiceImpl implements UserService {
 
     private static UserServiceImpl basicService;
 
+    @Lazy
     @Autowired
     private UserMapper userMapper;
 
+    @Lazy
     @Autowired
     private UserInfoMapper userInfoMapper;
 
+    @Lazy
     @Autowired
     private Sid sid;
 
@@ -42,6 +48,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @DataSourceSwitcher(DataSourceEnum.SLAVE)
     @Transactional(propagation = Propagation.SUPPORTS)
     public boolean queryUserIdIsExist(String userId) {
 
@@ -53,6 +60,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @DataSourceSwitcher(DataSourceEnum.SLAVE)
     @Transactional(propagation = Propagation.SUPPORTS)
     public boolean queryUsernameIsExist(String username) {
 
@@ -64,6 +72,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @DataSourceSwitcher(DataSourceEnum.SLAVE)
     @Transactional(propagation = Propagation.SUPPORTS)
     public User queryUser(String userId) {
         Example userExample = new Example(User.class);
@@ -76,6 +85,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @DataSourceSwitcher(DataSourceEnum.SLAVE)
     @Transactional(propagation = Propagation.SUPPORTS)
     public UserInfo queryUserInfo(String userId) {
         Example userInfoExample = new Example(UserInfo.class);
@@ -87,6 +97,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @DataSourceSwitcher(DataSourceEnum.SLAVE)
     @Transactional(propagation = Propagation.SUPPORTS)
     public User queryUserForLogin(String username, String password){
         Example userExample = new Example(User.class);
@@ -99,6 +110,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @DataSourceSwitcher(DataSourceEnum.MASTER)
     @Transactional(propagation = Propagation.REQUIRED)
     public void saveUser(User user) {
 
@@ -116,6 +128,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @DataSourceSwitcher(DataSourceEnum.MASTER)
     @Transactional(propagation = Propagation.REQUIRED)
     public boolean updateUser(User user){
         int i = basicService.userMapper.updateByPrimaryKey(user);
@@ -137,6 +150,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @DataSourceSwitcher(DataSourceEnum.MASTER)
     @Transactional(propagation = Propagation.REQUIRED)
     public void updateUserInfo(UserInfo userInfo){
 

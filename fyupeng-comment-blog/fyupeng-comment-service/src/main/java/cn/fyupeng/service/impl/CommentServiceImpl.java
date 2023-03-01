@@ -1,6 +1,8 @@
 package cn.fyupeng.service.impl;
 
-import cn.fyupeng.anotion.Service;
+import cn.fyupeng.annotation.DataSourceSwitcher;
+import cn.fyupeng.annotation.Service;
+import cn.fyupeng.enums.DataSourceEnum;
 import cn.fyupeng.mapper.CommentRepository;
 import cn.fyupeng.mapper.UserInfoMapper;
 import cn.fyupeng.pojo.Article;
@@ -15,6 +17,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.n3r.idworker.Sid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.*;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -44,15 +47,19 @@ public class CommentServiceImpl implements CommentService {
 
     private static CommentServiceImpl basicService;
 
+    @Lazy
     @Autowired
     private CommentRepository commentRepository;
 
+    @Lazy
     @Autowired
     private UserInfoMapper userInfoMapper;
 
+    @Lazy
     @Autowired
     private MongoTemplate mongoTemplate;
 
+    @Lazy
     @Autowired
     private Sid sid;
 
@@ -62,6 +69,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @DataSourceSwitcher(DataSourceEnum.SLAVE)
     @Transactional(propagation = Propagation.SUPPORTS)
     public boolean queryCommentIsExist(String commentId) {
 
@@ -76,6 +84,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @DataSourceSwitcher(DataSourceEnum.SLAVE)
     @Transactional(propagation = Propagation.SUPPORTS)
     public Comment queryComment(String commentId) {
 
@@ -90,6 +99,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @DataSourceSwitcher(DataSourceEnum.SLAVE)
     @Transactional(propagation = Propagation.SUPPORTS)
     public PagedResult queryAllComments(String articleId, Integer page, Integer pageSize, Integer sortNum) {
 
@@ -151,6 +161,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @DataSourceSwitcher(DataSourceEnum.SLAVE)
     @Transactional(propagation = Propagation.SUPPORTS)
     public boolean queryCommentWithFatherCommentIsExist(String commentId) {
 
@@ -170,6 +181,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @DataSourceSwitcher(DataSourceEnum.MASTER)
     @Transactional(propagation = Propagation.REQUIRED)
     public boolean saveComment(Comment comment) {
 
@@ -184,6 +196,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @DataSourceSwitcher(DataSourceEnum.MASTER)
     @Transactional(propagation = Propagation.REQUIRED)
     public boolean updateComment(Comment comment) {
 
@@ -195,6 +208,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @DataSourceSwitcher(DataSourceEnum.MASTER)
     @Transactional(propagation = Propagation.REQUIRED)
     public void removeCommentById(String commentId) {
 
@@ -206,6 +220,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @DataSourceSwitcher(DataSourceEnum.MASTER)
     @Transactional(propagation = Propagation.REQUIRED)
     public void removeCommentWithFatherCommentId(String fatherCommentId) {
 
@@ -216,6 +231,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @DataSourceSwitcher(DataSourceEnum.SLAVE)
     @Transactional(propagation = Propagation.SUPPORTS)
     public List<CommentVO> queryAllComments(String aPattern, String cPattern, String userId, Date startDate, Date endDate) {
 
@@ -304,6 +320,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @DataSourceSwitcher(DataSourceEnum.MASTER)
     @Transactional(propagation = Propagation.REQUIRED)
     public void setCommentStatusWithFatherId(Comment comment, CommentStatus commentStatus) {
         // 本评论

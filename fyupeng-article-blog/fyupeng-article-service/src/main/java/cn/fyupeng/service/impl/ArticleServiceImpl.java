@@ -1,21 +1,23 @@
 package cn.fyupeng.service.impl;
 
+import cn.fyupeng.annotation.DataSourceSwitcher;
+import cn.fyupeng.enums.DataSourceEnum;
 import cn.fyupeng.mapper.*;
 import cn.fyupeng.pojo.*;
 import cn.fyupeng.utils.PagedResult;
 import cn.fyupeng.utils.TimeAgoUtils;
 import cn.fyupeng.pojo.vo.ArticleVO;
 import cn.fyupeng.service.ArticleService;
-import cn.fyupeng.anotion.Service;
+import cn.fyupeng.annotation.Service;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.n3r.idworker.Sid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.*;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Field;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
@@ -40,27 +42,35 @@ public class ArticleServiceImpl implements ArticleService {
 
     private static ArticleServiceImpl basicService;
 
+    @Lazy
     @Autowired
     private ArticleRepository articleRepository;
 
+    @Lazy
     @Autowired
     private MongoTemplate mongoTemplate;
 
+    @Lazy
     @Autowired
     private UserInfoMapper userinfoMapper;
 
+    @Lazy
     @Autowired
     private ClassficationMapper classficationMapper;
 
+    @Lazy
     @Autowired
     private TagMapper tagMapper;
 
+    @Lazy
     @Autowired
     private Articles2tagsMapper articles2tagsMapper;
 
+    @Lazy
     @Autowired
     private PictureMapper pictureMapper;
 
+    @Lazy
     @Autowired
     private Sid sid;
 
@@ -70,6 +80,7 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
+    @DataSourceSwitcher(DataSourceEnum.SLAVE)
     @Transactional(propagation = Propagation.SUPPORTS)
     public boolean queryArticleIsExist(String articleId) {
 
@@ -85,6 +96,7 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
+    @DataSourceSwitcher(DataSourceEnum.SLAVE)
     @Transactional(propagation = Propagation.SUPPORTS)
     public boolean queryArticleIsUser(Article article) {
 
@@ -108,6 +120,7 @@ public class ArticleServiceImpl implements ArticleService {
      * @return
      */
     @Override
+    @DataSourceSwitcher(DataSourceEnum.SLAVE)
     @Transactional(propagation = Propagation.SUPPORTS)
     public PagedResult queryArticleSelective(Article article, Integer page, Integer pageSize) {
 
@@ -208,6 +221,7 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
+    @DataSourceSwitcher(DataSourceEnum.SLAVE)
     @Transactional(propagation = Propagation.SUPPORTS)
     public ArticleVO queryArticleDetail(String articleId) {
 
@@ -283,6 +297,7 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
+    @DataSourceSwitcher(DataSourceEnum.MASTER)
     @Transactional(propagation = Propagation.REQUIRED)
     public void multiUpdateArticleReadCounts(List<String> articleIdKeys, Map<String, String> articleMap) {
         for (String articleId : articleIdKeys) {
@@ -306,6 +321,7 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
+    @DataSourceSwitcher(DataSourceEnum.MASTER)
     @Transactional(propagation = Propagation.REQUIRED)
     public void removeArticle(String articleId) {
         /**
@@ -357,6 +373,7 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
+    @DataSourceSwitcher(DataSourceEnum.SLAVE)
     @Transactional(propagation = Propagation.SUPPORTS)
     public PagedResult queryArticleByTime(Long timeDifference, Integer page, Integer pageSize) {
 
@@ -448,6 +465,7 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
+    @DataSourceSwitcher(DataSourceEnum.SLAVE)
     @Transactional(propagation = Propagation.SUPPORTS)
     public List<ArticleVO> queryArticleWithNoneTagByUser(String userId) {
 
@@ -490,7 +508,8 @@ public class ArticleServiceImpl implements ArticleService {
                 Picture queryPicture = new Picture();
                 queryPicture.setId(articleCoverId);
                 Picture pictureInfo = basicService.pictureMapper.selectOne(queryPicture);
-                articleVO.setArticleCoverUrl(pictureInfo.getPicturePath());
+                if (pictureInfo != null)
+                    articleVO.setArticleCoverUrl(pictureInfo.getPicturePath());
             }
 
             /**
@@ -511,6 +530,7 @@ public class ArticleServiceImpl implements ArticleService {
 
 
     @Override
+    @DataSourceSwitcher(DataSourceEnum.MASTER)
     @Transactional(propagation = Propagation.REQUIRED)
     public boolean save(Article article) {
 
@@ -528,6 +548,7 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
+    @DataSourceSwitcher(DataSourceEnum.MASTER)
     @Transactional(propagation = Propagation.REQUIRED)
     public boolean saveWithIdAndUserId(Article article) {
 

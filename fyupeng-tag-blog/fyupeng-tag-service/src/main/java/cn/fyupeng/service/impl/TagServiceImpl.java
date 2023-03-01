@@ -1,21 +1,19 @@
 package cn.fyupeng.service.impl;
 
-import cn.fyupeng.pojo.Article;
-import cn.fyupeng.pojo.Articles2tags;
-import cn.fyupeng.pojo.Classfication;
-import cn.fyupeng.pojo.Tag;
+import cn.fyupeng.annotation.DataSourceSwitcher;
+import cn.fyupeng.enums.DataSourceEnum;
+import cn.fyupeng.mapper.*;
+import cn.fyupeng.pojo.*;
 import cn.fyupeng.utils.TimeAgoUtils;
-import cn.fyupeng.mapper.ArticleRepository;
-import cn.fyupeng.mapper.Articles2tagsMapper;
-import cn.fyupeng.mapper.ClassficationMapper;
-import cn.fyupeng.mapper.TagMapper;
 import cn.fyupeng.pojo.vo.Articles2tagsVO;
 import cn.fyupeng.pojo.vo.TagVO;
 import cn.fyupeng.service.TagService;
-import cn.fyupeng.anotion.Service;
+import cn.fyupeng.annotation.Service;
+import org.apache.commons.lang3.StringUtils;
 import org.n3r.idworker.Sid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,18 +38,27 @@ public class TagServiceImpl implements TagService {
 
     private static TagServiceImpl basicService;
 
+    @Lazy
     @Autowired
     private TagMapper tagMapper;
 
+    @Lazy
     @Autowired
     private Articles2tagsMapper articles2tagsMapper;
 
+    @Lazy
     @Autowired
     private ArticleRepository articleRepository;
 
+    @Lazy
     @Autowired
     private ClassficationMapper classficationMapper;
 
+    @Lazy
+    @Autowired
+    private PictureMapper pictureMapper;
+
+    @Lazy
     @Autowired
     private Sid sid;
 
@@ -61,6 +68,7 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
+    @DataSourceSwitcher(DataSourceEnum.SLAVE)
     @Transactional(propagation = Propagation.SUPPORTS)
     public boolean queryTagIsExist(Tag tag) {
 
@@ -70,6 +78,7 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
+    @DataSourceSwitcher(DataSourceEnum.SLAVE)
     @Transactional(propagation = Propagation.SUPPORTS)
     public boolean queryArticleTagIsExist(String id) {
 
@@ -87,6 +96,7 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
+    @DataSourceSwitcher(DataSourceEnum.SLAVE)
     @Transactional(propagation = Propagation.SUPPORTS)
     public Tag queryTag(String tagId) {
 
@@ -96,14 +106,11 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
+    @DataSourceSwitcher(DataSourceEnum.SLAVE)
     @Transactional(propagation = Propagation.SUPPORTS)
     public List<Articles2tagsVO> queryArticleTag(Articles2tags articles2tags) {
 
         List<Articles2tags> articles2tagsList = basicService.articles2tagsMapper.select(articles2tags);
-
-        for (Articles2tags tags : articles2tagsList) {
-            System.out.println(tags);
-        }
 
         List<Articles2tagsVO> articles2tagsVOList = new ArrayList<>();
         for (Articles2tags articleTags : articles2tagsList) {
@@ -135,6 +142,15 @@ public class TagServiceImpl implements TagService {
                 articles2tagsVO.setCommentCounts(one.getCommentCounts());
                 articles2tagsVO.setReadCounts(one.getReadCounts());
                 articles2tagsVO.setReceiveLikeCounts(one.getReceiveLikeCounts());
+                articles2tagsVO.setArticleCoverId(one.getArticleCoverId());
+
+                String articleCoverId = one.getArticleCoverId();
+                if (!StringUtils.isBlank(articleCoverId)) {
+                    Picture queryPicture = new Picture();
+                    queryPicture.setId(articleCoverId);
+                    Picture pictureInfo = basicService.pictureMapper.selectOne(queryPicture);
+                    articles2tagsVO.setArticleCoverUrl(pictureInfo.getPicturePath());
+                }
 
                 String createTimeAgo = TimeAgoUtils.format(one.getCreateTime());
                 String updateTimaAgo = TimeAgoUtils.format(one.getUpdateTime());
@@ -150,6 +166,7 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
+    @DataSourceSwitcher(DataSourceEnum.SLAVE)
     @Transactional(propagation = Propagation.SUPPORTS)
     public List<TagVO> queryAllTags(Tag tag) {
 
@@ -176,6 +193,7 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
+    @DataSourceSwitcher(DataSourceEnum.MASTER)
     @Transactional(propagation = Propagation.REQUIRED)
     public boolean saveTag(Tag tag) {
 
@@ -188,6 +206,7 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
+    @DataSourceSwitcher(DataSourceEnum.MASTER)
     @Transactional(propagation = Propagation.REQUIRED)
     public boolean saveArticleTag(Articles2tags articles2tags) {
 
@@ -200,6 +219,7 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
+    @DataSourceSwitcher(DataSourceEnum.MASTER)
     @Transactional(propagation = Propagation.REQUIRED)
     public boolean updateArticleTag(Articles2tags articles2tags) {
 
@@ -209,6 +229,7 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
+    @DataSourceSwitcher(DataSourceEnum.MASTER)
     @Transactional(propagation = Propagation.REQUIRED)
     public boolean deleteTagAndArticleTagWithArticleId(String articleId) {
         Example example = new Example(Articles2tags.class);
@@ -222,6 +243,7 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
+    @DataSourceSwitcher(DataSourceEnum.MASTER)
     @Transactional(propagation = Propagation.REQUIRED)
     public boolean updateTag(Tag tag) {
 
@@ -231,6 +253,7 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
+    @DataSourceSwitcher(DataSourceEnum.MASTER)
     @Transactional(propagation = Propagation.REQUIRED)
     public boolean deleteTag(String tagId) {
 
@@ -240,6 +263,7 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
+    @DataSourceSwitcher(DataSourceEnum.MASTER)
     @Transactional(propagation = Propagation.REQUIRED)
     public void delArticleTag(String tagId) {
 
@@ -252,6 +276,7 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
+    @DataSourceSwitcher(DataSourceEnum.MASTER)
     @Transactional(propagation = Propagation.REQUIRED)
     public boolean deleteTagAndArticleTagWithTagId(String tagId) {
         boolean result = deleteTag(tagId);
