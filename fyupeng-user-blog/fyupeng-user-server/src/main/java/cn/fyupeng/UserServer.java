@@ -4,7 +4,6 @@ import cn.fyupeng.config.ResourceConfig;
 import cn.fyupeng.annotation.ServiceScan;
 import cn.fyupeng.enums.SerializerCode;
 import cn.fyupeng.exception.RpcException;
-import cn.fyupeng.idworker.utils.JRedisHelper;
 import cn.fyupeng.net.netty.server.NettyServer;
 import cn.fyupeng.util.IpUtils;
 import cn.fyupeng.util.SpringContextUtil;
@@ -63,13 +62,11 @@ public class UserServer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        JRedisHelper.getForHostName(IpUtils.getPubIpAddr());
         //这里也可以添加一些业务处理方法，比如一些初始化参数等
         while(true){
             NettyServer nettyServer = null;
             try {
                 nettyServer = new NettyServer(resourceConfig.getServerIp(), resourceConfig.getServerPort(), SerializerCode.HESSIAN.getCode()) {
-
                     @Override
                     public Object newInstance(String fullName, String simpleName, String firstLowCaseName, Class<?> clazz) throws InstantiationException, IllegalAccessException {
                         return SpringContextUtil.getBean(firstLowCaseName, clazz);

@@ -24,6 +24,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ResourceBundle;
 
 @CrossOrigin
 @RestController
@@ -33,8 +34,18 @@ public class UserController extends BasicController {
 
     private static String baidu_server = "https://aip.baidubce.com/oauth/2.0/token?";
     private static String grant_type = "client_credentials";
-    private static String client_id = "4wCZa9Vp3GUztFjG3VtYsjEY"; // 应用的API Key
-    private static String client_secret = "iSMYjUURnZM0eyn4w6SSinXMV5Y0PrU7"; // 应用的Secret Key
+    private static final ResourceBundle resourceBundle = ResourceBundle.getBundle("resource");
+
+    //private static String client_id = "BBVy0dHqG8CZSpExlPdksj4G"; // 应用的API Key
+    //private static String client_secret = "AXjeTWzolNTrdn7kDzo8NCr0dlb4AQtI"; // 应用的Secret Key
+
+    private static String client_id = ""; // 应用的API Key
+    private static String client_secret = ""; // 应用的Secret Key
+
+    static {
+        client_id = resourceBundle.getString("client_id");
+        client_secret = resourceBundle.getString("client_secret");
+    }
 
     private static String url =
             baidu_server +
