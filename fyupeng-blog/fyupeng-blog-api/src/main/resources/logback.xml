@@ -11,6 +11,13 @@
     <!--  日志输出格式  -->
     <property name="encoder.pattern" value="%d{yyyy/MM/dd HH:mm:ss.SSS} %-5level [%thread] [%c{0}:%L] : %msg%n"/>
 
+    <appender name="logstash" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+        <destination>192.168.10.100:4560</destination>
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <customFields>{"appname": "${springApplicationName}"}</customFields>
+        </encoder>
+    </appender>
+
     <!--  日志输出控制台  -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
@@ -156,10 +163,16 @@
         <appender-ref ref="DRUID_MONITOR" />
     </logger>
 
+    <!-- 为 error 级别单独配置一个 logger，只引用 logstash appender -->
+    <logger name="cn.fyupeng" level="ERROR">
+        <appender-ref ref="logstash"/>
+        <appender-ref ref="FILE_ERROR"/> <!-- 如果错误日志也需要写入 FILE_ERROR -->
+    </logger>
+
 
     <root level="info">
         <appender-ref ref="COLOR_CONSOLE"/>
         <appender-ref ref="FILE_INFO"/>
-        <appender-ref ref="FILE_ERROR"/>
     </root>
+
 </configuration>
