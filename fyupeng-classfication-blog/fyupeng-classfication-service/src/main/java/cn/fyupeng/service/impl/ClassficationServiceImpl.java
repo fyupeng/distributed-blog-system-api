@@ -47,7 +47,6 @@ public class ClassficationServiceImpl implements ClassficationService {
 
     @Override
     @DataSourceSwitcher(DataSourceEnum.SLAVE)
-    @Transactional(propagation = Propagation.SUPPORTS)
     public boolean queryClassficationIdIsExist(String classId) {
 
         Classfication classfication = basicService.classficationMapper.selectByPrimaryKey(classId);
@@ -62,7 +61,6 @@ public class ClassficationServiceImpl implements ClassficationService {
      */
     @Override
     @DataSourceSwitcher(DataSourceEnum.SLAVE)
-    @Transactional(propagation = Propagation.SUPPORTS)
     public Classfication queryClassfication(Classfication classfication) {
 
         List<Classfication> result = basicService.classficationMapper.select(classfication);
@@ -72,7 +70,6 @@ public class ClassficationServiceImpl implements ClassficationService {
 
     @Override
     @DataSourceSwitcher(DataSourceEnum.SLAVE)
-    @Transactional(propagation = Propagation.SUPPORTS)
     public List<Classfication> queryAllClassfications() {
 
         Example classficationExample = new Example(Classfication.class);
@@ -91,7 +88,7 @@ public class ClassficationServiceImpl implements ClassficationService {
      */
     @Override
     @DataSourceSwitcher(DataSourceEnum.MASTER)
-    @Transactional(propagation = Propagation.REQUIRED)
+    @Transactional(rollbackFor = Exception.class)
     public boolean saveClassfication(Classfication classfication) {
 
         String classficationId = basicService.sid.nextShort();
@@ -105,7 +102,7 @@ public class ClassficationServiceImpl implements ClassficationService {
 
     @Override
     @DataSourceSwitcher(DataSourceEnum.MASTER)
-    @Transactional(propagation = Propagation.REQUIRED)
+    @Transactional(rollbackFor = Exception.class)
     public boolean updateClassfication(Classfication clssfication) {
 
         int i = basicService.classficationMapper.updateByPrimaryKeySelective(clssfication);
@@ -115,7 +112,7 @@ public class ClassficationServiceImpl implements ClassficationService {
 
     @Override
     @DataSourceSwitcher(DataSourceEnum.MASTER)
-    @Transactional(propagation = Propagation.REQUIRED)
+    @Transactional(rollbackFor = Exception.class)
     public boolean deleteClassfication(String classficationId) {
 
         int i = basicService.classficationMapper.deleteByPrimaryKey(classficationId);

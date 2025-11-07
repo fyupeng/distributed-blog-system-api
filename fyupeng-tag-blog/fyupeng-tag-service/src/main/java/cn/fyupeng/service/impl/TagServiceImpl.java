@@ -69,7 +69,6 @@ public class TagServiceImpl implements TagService {
 
     @Override
     @DataSourceSwitcher(DataSourceEnum.SLAVE)
-    @Transactional(propagation = Propagation.SUPPORTS)
     public boolean queryTagIsExist(Tag tag) {
 
         Tag result = basicService.tagMapper.selectOne(tag);
@@ -79,7 +78,6 @@ public class TagServiceImpl implements TagService {
 
     @Override
     @DataSourceSwitcher(DataSourceEnum.SLAVE)
-    @Transactional(propagation = Propagation.SUPPORTS)
     public boolean queryArticleTagIsExist(String id) {
 
         Articles2tags result = basicService.articles2tagsMapper.selectByPrimaryKey(id);
@@ -97,7 +95,6 @@ public class TagServiceImpl implements TagService {
 
     @Override
     @DataSourceSwitcher(DataSourceEnum.SLAVE)
-    @Transactional(propagation = Propagation.SUPPORTS)
     public Tag queryTag(String tagId) {
 
         Tag tag = basicService.tagMapper.selectByPrimaryKey(tagId);
@@ -107,7 +104,6 @@ public class TagServiceImpl implements TagService {
 
     @Override
     @DataSourceSwitcher(DataSourceEnum.SLAVE)
-    @Transactional(propagation = Propagation.SUPPORTS)
     public List<Articles2tagsVO> queryArticleTag(Articles2tags articles2tags) {
 
         List<Articles2tags> articles2tagsList = basicService.articles2tagsMapper.select(articles2tags);
@@ -167,7 +163,6 @@ public class TagServiceImpl implements TagService {
 
     @Override
     @DataSourceSwitcher(DataSourceEnum.SLAVE)
-    @Transactional(propagation = Propagation.SUPPORTS)
     public List<TagVO> queryAllTags(Tag tag) {
 
         List<Tag> select = basicService.tagMapper.select(tag);
@@ -194,7 +189,7 @@ public class TagServiceImpl implements TagService {
 
     @Override
     @DataSourceSwitcher(DataSourceEnum.MASTER)
-    @Transactional(propagation = Propagation.REQUIRED)
+    @Transactional(rollbackFor = Exception.class)
     public boolean saveTag(Tag tag) {
 
         String tagId = basicService.sid.nextShort();
@@ -207,7 +202,7 @@ public class TagServiceImpl implements TagService {
 
     @Override
     @DataSourceSwitcher(DataSourceEnum.MASTER)
-    @Transactional(propagation = Propagation.REQUIRED)
+    @Transactional(rollbackFor = Exception.class)
     public boolean saveArticleTag(Articles2tags articles2tags) {
 
         String articles2tagsId = basicService.sid.nextShort();
@@ -220,7 +215,7 @@ public class TagServiceImpl implements TagService {
 
     @Override
     @DataSourceSwitcher(DataSourceEnum.MASTER)
-    @Transactional(propagation = Propagation.REQUIRED)
+    @Transactional(rollbackFor = Exception.class)
     public boolean updateArticleTag(Articles2tags articles2tags) {
 
         int i = basicService.articles2tagsMapper.updateByPrimaryKey(articles2tags);
@@ -230,7 +225,7 @@ public class TagServiceImpl implements TagService {
 
     @Override
     @DataSourceSwitcher(DataSourceEnum.MASTER)
-    @Transactional(propagation = Propagation.REQUIRED)
+    @Transactional(rollbackFor = Exception.class)
     public boolean deleteTagAndArticleTagWithArticleId(String articleId) {
         Example example = new Example(Articles2tags.class);
 
@@ -244,7 +239,7 @@ public class TagServiceImpl implements TagService {
 
     @Override
     @DataSourceSwitcher(DataSourceEnum.MASTER)
-    @Transactional(propagation = Propagation.REQUIRED)
+    @Transactional(rollbackFor = Exception.class)
     public boolean updateTag(Tag tag) {
 
         int i = basicService.tagMapper.updateByPrimaryKeySelective(tag);
@@ -254,7 +249,7 @@ public class TagServiceImpl implements TagService {
 
     @Override
     @DataSourceSwitcher(DataSourceEnum.MASTER)
-    @Transactional(propagation = Propagation.REQUIRED)
+    @Transactional(rollbackFor = Exception.class)
     public boolean deleteTag(String tagId) {
 
         int i = basicService.tagMapper.deleteByPrimaryKey(tagId);
@@ -264,7 +259,7 @@ public class TagServiceImpl implements TagService {
 
     @Override
     @DataSourceSwitcher(DataSourceEnum.MASTER)
-    @Transactional(propagation = Propagation.REQUIRED)
+    @Transactional(rollbackFor = Exception.class)
     public void delArticleTag(String tagId) {
 
         Example articles2tagsExample = new Example(Articles2tags.class);
@@ -277,7 +272,7 @@ public class TagServiceImpl implements TagService {
 
     @Override
     @DataSourceSwitcher(DataSourceEnum.MASTER)
-    @Transactional(propagation = Propagation.REQUIRED)
+    @Transactional(rollbackFor = Exception.class)
     public boolean deleteTagAndArticleTagWithTagId(String tagId) {
         boolean result = deleteTag(tagId);
         if (result)

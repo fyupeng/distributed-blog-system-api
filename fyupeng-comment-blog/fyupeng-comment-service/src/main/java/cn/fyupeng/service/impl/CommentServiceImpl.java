@@ -70,7 +70,6 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @DataSourceSwitcher(DataSourceEnum.SLAVE)
-    @Transactional(propagation = Propagation.SUPPORTS)
     public boolean queryCommentIsExist(String commentId) {
 
         Comment comment = new Comment();
@@ -85,7 +84,6 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @DataSourceSwitcher(DataSourceEnum.SLAVE)
-    @Transactional(propagation = Propagation.SUPPORTS)
     public Comment queryComment(String commentId) {
 
         Comment comment = new Comment();
@@ -100,7 +98,6 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @DataSourceSwitcher(DataSourceEnum.SLAVE)
-    @Transactional(propagation = Propagation.SUPPORTS)
     public PagedResult queryAllComments(String articleId, Integer page, Integer pageSize, Integer sortNum) {
 
         //分页查询对象
@@ -162,7 +159,6 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @DataSourceSwitcher(DataSourceEnum.SLAVE)
-    @Transactional(propagation = Propagation.SUPPORTS)
     public boolean queryCommentWithFatherCommentIsExist(String commentId) {
 
         ExampleMatcher matching = ExampleMatcher.matching();
@@ -182,7 +178,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @DataSourceSwitcher(DataSourceEnum.MASTER)
-    @Transactional(propagation = Propagation.REQUIRED)
+    @Transactional(rollbackFor = Exception.class)
     public boolean saveComment(Comment comment) {
 
         String commentId = basicService.sid.nextShort();
@@ -197,7 +193,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @DataSourceSwitcher(DataSourceEnum.MASTER)
-    @Transactional(propagation = Propagation.REQUIRED)
+    @Transactional(rollbackFor = Exception.class)
     public boolean updateComment(Comment comment) {
 
         comment.setStatus(CommentStatus.NORMAL.getStatus());
@@ -209,7 +205,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @DataSourceSwitcher(DataSourceEnum.MASTER)
-    @Transactional(propagation = Propagation.REQUIRED)
+    @Transactional(rollbackFor = Exception.class)
     public void removeCommentById(String commentId) {
 
         Comment comment = new Comment();
@@ -221,7 +217,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @DataSourceSwitcher(DataSourceEnum.MASTER)
-    @Transactional(propagation = Propagation.REQUIRED)
+    @Transactional(rollbackFor = Exception.class)
     public void removeCommentWithFatherCommentId(String fatherCommentId) {
 
         Comment comment = new Comment();
@@ -232,7 +228,6 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @DataSourceSwitcher(DataSourceEnum.SLAVE)
-    @Transactional(propagation = Propagation.SUPPORTS)
     public List<CommentVO> queryAllComments(String aPattern, String cPattern, String userId, Date startDate, Date endDate) {
 
         if (StringUtils.isBlank(aPattern)) {
@@ -321,7 +316,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @DataSourceSwitcher(DataSourceEnum.MASTER)
-    @Transactional(propagation = Propagation.REQUIRED)
+    @Transactional(rollbackFor = Exception.class)
     public void setCommentStatusWithFatherId(Comment comment, CommentStatus commentStatus) {
         // 本评论
         comment.setStatus(commentStatus.getStatus());

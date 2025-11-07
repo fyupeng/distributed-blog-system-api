@@ -49,7 +49,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @DataSourceSwitcher(DataSourceEnum.SLAVE)
-    @Transactional(propagation = Propagation.SUPPORTS)
     public boolean queryUserIdIsExist(String userId) {
 
         User user = new User();
@@ -61,7 +60,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @DataSourceSwitcher(DataSourceEnum.SLAVE)
-    @Transactional(propagation = Propagation.SUPPORTS)
     public boolean queryUsernameIsExist(String username) {
 
         User user = new User();
@@ -73,7 +71,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @DataSourceSwitcher(DataSourceEnum.SLAVE)
-    @Transactional(propagation = Propagation.SUPPORTS)
     public User queryUser(String userId) {
         Example userExample = new Example(User.class);
 
@@ -86,7 +83,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @DataSourceSwitcher(DataSourceEnum.SLAVE)
-    @Transactional(propagation = Propagation.SUPPORTS)
     public UserInfo queryUserInfo(String userId) {
         Example userInfoExample = new Example(UserInfo.class);
 
@@ -98,7 +94,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @DataSourceSwitcher(DataSourceEnum.SLAVE)
-    @Transactional(propagation = Propagation.SUPPORTS)
     public User queryUserForLogin(String username, String password){
         Example userExample = new Example(User.class);
         Criteria criteria = userExample.createCriteria();
@@ -111,7 +106,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @DataSourceSwitcher(DataSourceEnum.MASTER)
-    @Transactional(propagation = Propagation.REQUIRED)
+    @Transactional(rollbackFor = Exception.class)
     public void saveUser(User user) {
 
         String userId = basicService.sid.nextShort();
@@ -129,7 +124,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @DataSourceSwitcher(DataSourceEnum.MASTER)
-    @Transactional(propagation = Propagation.REQUIRED)
+    @Transactional(rollbackFor = Exception.class)
     public boolean updateUser(User user){
         int i = basicService.userMapper.updateByPrimaryKey(user);
 
@@ -151,7 +146,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @DataSourceSwitcher(DataSourceEnum.MASTER)
-    @Transactional(propagation = Propagation.REQUIRED)
+    @Transactional(rollbackFor = Exception.class)
     public void updateUserInfo(UserInfo userInfo){
 
         Example userInfoExample = new Example(UserInfo.class);
