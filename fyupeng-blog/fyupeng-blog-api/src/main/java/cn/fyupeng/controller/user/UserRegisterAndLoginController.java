@@ -76,7 +76,7 @@ public class UserRegisterAndLoginController extends BasicController {
 
         String userRedisSession = RedisUtils.getUserRedisSession(userModel.getId());
 
-        redis.set(userRedisSession, token,  60 * 5);
+        redis.set(userRedisSession, token,  60 * 60);
 
         UserVO usersVO = new UserVO();
         BeanUtils.copyProperties(userModel, usersVO);

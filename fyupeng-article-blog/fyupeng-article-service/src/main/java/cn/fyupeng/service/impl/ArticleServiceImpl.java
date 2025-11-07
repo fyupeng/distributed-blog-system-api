@@ -81,7 +81,6 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     @DataSourceSwitcher(DataSourceEnum.SLAVE)
-    @Transactional(propagation = Propagation.SUPPORTS)
     public boolean queryArticleIsExist(String articleId) {
 
         Article article = new Article();
@@ -97,7 +96,6 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     @DataSourceSwitcher(DataSourceEnum.SLAVE)
-    @Transactional(propagation = Propagation.SUPPORTS)
     public boolean queryArticleIsUser(Article article) {
 
         ExampleMatcher matching = ExampleMatcher.matching();
@@ -121,7 +119,6 @@ public class ArticleServiceImpl implements ArticleService {
      */
     @Override
     @DataSourceSwitcher(DataSourceEnum.SLAVE)
-    @Transactional(propagation = Propagation.SUPPORTS)
     public PagedResult queryArticleSelective(Article article, Integer page, Integer pageSize) {
 
         //分页查询对象
@@ -222,7 +219,6 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     @DataSourceSwitcher(DataSourceEnum.SLAVE)
-    @Transactional(propagation = Propagation.SUPPORTS)
     public ArticleVO queryArticleDetail(String articleId) {
 
         /**
@@ -298,7 +294,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     @DataSourceSwitcher(DataSourceEnum.MASTER)
-    @Transactional(propagation = Propagation.REQUIRED)
+    @Transactional(rollbackFor = Exception.class)
     public void multiUpdateArticleReadCounts(List<String> articleIdKeys, Map<String, String> articleMap) {
         for (String articleId : articleIdKeys) {
 
@@ -322,7 +318,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     @DataSourceSwitcher(DataSourceEnum.MASTER)
-    @Transactional(propagation = Propagation.REQUIRED)
+    @Transactional(rollbackFor = Exception.class)
     public void removeArticle(String articleId) {
         /**
          * 必须根据 id 删除
@@ -374,7 +370,6 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     @DataSourceSwitcher(DataSourceEnum.SLAVE)
-    @Transactional(propagation = Propagation.SUPPORTS)
     public PagedResult queryArticleByTime(Long timeDifference, Integer page, Integer pageSize) {
 
         //分页查询对象
@@ -466,7 +461,6 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     @DataSourceSwitcher(DataSourceEnum.SLAVE)
-    @Transactional(propagation = Propagation.SUPPORTS)
     public List<ArticleVO> queryArticleWithNoneTagByUser(String userId) {
 
         ExampleMatcher matching = ExampleMatcher.matching();
@@ -531,7 +525,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     @DataSourceSwitcher(DataSourceEnum.MASTER)
-    @Transactional(propagation = Propagation.REQUIRED)
+    @Transactional(rollbackFor = Exception.class)
     public boolean save(Article article) {
 
         String articleId = basicService.sid.nextShort();
@@ -549,7 +543,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     @DataSourceSwitcher(DataSourceEnum.MASTER)
-    @Transactional(propagation = Propagation.REQUIRED)
+    @Transactional(rollbackFor = Exception.class)
     public boolean saveWithIdAndUserId(Article article) {
 
         Article article1 = new Article();

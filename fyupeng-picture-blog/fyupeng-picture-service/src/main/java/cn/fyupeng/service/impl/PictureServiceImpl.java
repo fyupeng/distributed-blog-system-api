@@ -53,7 +53,6 @@ public class PictureServiceImpl implements PictureService {
 
     @Override
     @DataSourceSwitcher(DataSourceEnum.SLAVE)
-    @Transactional(propagation = Propagation.SUPPORTS)
     public boolean queryPictureIsExist(Picture picture) {
         List<Picture> result = basicService.pictureMapper.select(picture);
 
@@ -62,7 +61,6 @@ public class PictureServiceImpl implements PictureService {
 
     @Override
     @DataSourceSwitcher(DataSourceEnum.SLAVE)
-    @Transactional(propagation = Propagation.SUPPORTS)
     public Picture queryPicture(Picture picture) {
 
         List<Picture> result = basicService.pictureMapper.select(picture);
@@ -73,7 +71,6 @@ public class PictureServiceImpl implements PictureService {
 
     @Override
     @DataSourceSwitcher(DataSourceEnum.SLAVE)
-    @Transactional(propagation = Propagation.SUPPORTS)
     public PagedResult getAllPictures(Picture picture, Integer page, Integer pageSize) {
 
         //分页查询对象
@@ -119,7 +116,7 @@ public class PictureServiceImpl implements PictureService {
 
     @Override
     @DataSourceSwitcher(DataSourceEnum.MASTER)
-    @Transactional(propagation = Propagation.REQUIRED)
+    @Transactional(rollbackFor = Exception.class)
     public boolean updatePicture(Picture picture) {
 
         int i = basicService.pictureMapper.updateByPrimaryKeySelective(picture);
@@ -129,7 +126,7 @@ public class PictureServiceImpl implements PictureService {
 
     @Override
     @DataSourceSwitcher(DataSourceEnum.MASTER)
-    @Transactional(propagation = Propagation.REQUIRED)
+    @Transactional(rollbackFor = Exception.class)
     public void upload(Picture picture) {
         String pictureId = basicService.sid.nextShort();
 
@@ -154,7 +151,7 @@ public class PictureServiceImpl implements PictureService {
 
     @Override
     @DataSourceSwitcher(DataSourceEnum.MASTER)
-    @Transactional(propagation = Propagation.REQUIRED)
+    @Transactional(rollbackFor = Exception.class)
     public boolean deletePicture(Picture picture) {
 
         int i = basicService.pictureMapper.delete(picture);
