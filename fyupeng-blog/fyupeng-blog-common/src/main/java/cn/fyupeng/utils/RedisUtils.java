@@ -30,6 +30,10 @@ public class RedisUtils {
         return USER_REDIS_SESSION + ":" + userId;
     }
 
+    public static String getAllUserRedisSession() {
+        return USER_REDIS_SESSION;
+    }
+
     public static String getAdminRedisSession(String userId) {
         return ADMIN_REDIS_SESSION + ":" + userId;
     }
