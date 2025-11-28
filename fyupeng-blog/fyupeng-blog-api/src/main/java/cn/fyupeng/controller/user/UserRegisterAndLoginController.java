@@ -10,6 +10,7 @@ import cn.fyupeng.utils.BlogJSONResult;
 import cn.fyupeng.utils.MD5Utils;
 import cn.fyupeng.utils.RedisUtils;
 import cn.fyupeng.utils.TokenUtils;
+import cn.hutool.core.collection.CollectionUtil;
 import com.auth0.jwt.JWT;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -19,6 +20,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * @Auther: fyp
@@ -159,6 +161,19 @@ public class UserRegisterAndLoginController extends BasicController {
 
         return BlogJSONResult.ok("注销成功");
 
+    }
+
+    /**
+     * 拦截器不拦截注册，所以不需要注解 @PassToken
+     * @return
+     * @throws Exception
+     */
+    @ApiOperation(value = "获取在线用户量", notes = "获取在线用户量的接口")
+    @PostMapping(value = "/getOnlineIpCount")
+    public BlogJSONResult getOnlineIpCount() {
+        String allUserRedisSession = RedisUtils.getAllUserRedisSession();
+        List<String> allUserRedisToken = redis.getKeysByPrefix(allUserRedisSession);
+        return CollectionUtil.isEmpty(allUserRedisToken) ? BlogJSONResult.ok(0) : BlogJSONResult.ok(allUserRedisToken.size());
     }
 
 }
