@@ -29,7 +29,8 @@ public class InterceptorConfig implements WebMvcConfigurer {
         };
         String[] excludePathPatterns={
                 "/user/login",
-                "/user/regist"
+                "/user/regist",
+                "/user/getOnlineIpCount"
         };
         registry.addInterceptor(loginInterceptor).addPathPatterns(addPathPatterns).excludePathPatterns(excludePathPatterns);
     }
