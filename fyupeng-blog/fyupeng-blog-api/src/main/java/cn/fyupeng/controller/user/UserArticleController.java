@@ -49,7 +49,6 @@ public class UserArticleController extends BasicController {
     @Reference(timeout = 8000, asyncTime = 15000)
     private ClassficationService classficationServiceProxy = rpcClientProxy.getProxy(ClassficationService.class, UserArticleController.class);
 
-
     @PassToken
     @PostMapping(value = "/getAllArticles")
     @ApiOperation(value = "查找文章信息", notes = "查找文章信息的接口")
@@ -260,14 +259,20 @@ public class UserArticleController extends BasicController {
         String searchHistoryKey = RedisUtils.getSearchHistoryKey(userId);
         boolean keyIsExist = redis.hasKey(searchHistoryKey);
         if (keyIsExist) {
-            String hk = redis.hget(searchHistoryKey, searchKey);
-            // 关键字 key 存在
-            if (hk != null) {
-                return false;
-            // 关键 key 不存在
-            } else {
-                redis.hset(searchHistoryKey, searchKey, "1");
+            String hkv = redis.hget(searchHistoryKey, searchKey);
+            try {
+                if (hkv != null) {
+                    // 关键字 key 存在
+                    Integer historyKeyVisitCount = Integer.valueOf(hkv);
+                    redis.hset(searchHistoryKey, searchKey, historyKeyVisitCount + 1);
+                } else {
+                    // 关键 key 不存在
+                    redis.hset(searchHistoryKey, searchKey, "1");
+                }
+            } catch (Exception e) {
+                log.error("个人历史查询key值异常,", e);
             }
+
         // 首次 会 创建 包含 userId 的 key
         } else {
             redis.hset(searchHistoryKey, searchKey, "1");
@@ -315,16 +320,13 @@ public class UserArticleController extends BasicController {
         String searchScoreKey = RedisUtils.getSearchScoreKey();
         Long now = System.currentTimeMillis();
 
-        // 只需第一次设置 时间戳
-        if (redis.zScore(searchScoreKey, searchKey) == null) {
-            // 统计 时间戳
-            /**
-             * 规则： key: search-score:java
-             *       value: 时间戳
-             */
-            String keyWithSearchKey = RedisUtils.getSearchScoreKeyWithSearchKey(searchKey);
-            redis.set(keyWithSearchKey, String.valueOf(now));
-        }
+        String keyWithSearchKey = RedisUtils.getSearchScoreKeyWithSearchKey(searchKey);
+        // 统计 时间戳
+        /**
+         * 规则： key: search-score:java
+         *       value: 时间戳
+         */
+        redis.set(keyWithSearchKey, String.valueOf(now), ONE_WEEK);
         // 统计 点击量
         redis.zIncrementScore(searchScoreKey, searchKey, 1);
     }
@@ -368,8 +370,6 @@ public class UserArticleController extends BasicController {
             size = SEARCH_SIZE;
         }
 
-        Long now = System.currentTimeMillis();
-
         String searchScoreKey = RedisUtils.getSearchScoreKey();
         Set<String> allKeys = redis.zRevRangeByScore(searchScoreKey, 0, Double.MAX_VALUE);
 
@@ -386,13 +386,10 @@ public class UserArticleController extends BasicController {
                     String searchScoreKeyWithSearchKey = RedisUtils.getSearchScoreKeyWithSearchKey(key);
                     String timeStamp = redis.get(searchScoreKeyWithSearchKey);
                     if (timeStamp != null) {
-                        Long time = Long.valueOf(timeStamp);
                         // 查询 最近一个礼拜的 数据
-                        if ((now - time) < 604800000L) {
-                            resultList.add(key);
-                        } else {
-                            redis.zset(searchScoreKey, key, 0);
-                        }
+                        resultList.add(key);
+                    } else {
+                        redis.zrem(searchScoreKey, key);
                     }
                 }
             }
@@ -407,13 +404,10 @@ public class UserArticleController extends BasicController {
                 String searchScoreKeyWithSearchKey = RedisUtils.getSearchScoreKeyWithSearchKey(key);
                 String timeStamp = redis.get(searchScoreKeyWithSearchKey);
                 if (timeStamp != null) {
-                    Long time = Long.valueOf(timeStamp);
                     // 查询 最近一个礼拜的 数据
-                    if ((now - time) < 604800000L) {
-                        resultList.add(key);
-                    } else {
-                        redis.zset(searchScoreKey, key, 0);
-                    }
+                    resultList.add(key);
+                } else {
+                    redis.zrem(searchScoreKey, key);
                 }
             }
         }

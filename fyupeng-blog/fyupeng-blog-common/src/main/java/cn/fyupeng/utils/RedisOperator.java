@@ -223,6 +223,10 @@ public class RedisOperator {
 		return redisTemplate.opsForZSet().add(key, value, score);
 	}
 
+	public Long zrem(String key, Object... value) {
+		return redisTemplate.opsForZSet().remove(key, value);
+	}
+
 	public Double zScore(String key, String value) {
 		return redisTemplate.opsForZSet().score(key, value);
 	}
